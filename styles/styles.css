@@ -303,7 +303,7 @@ p:first-child {
   margin-top: 0;
 }
 
-h1 {
+h1:not(#page-heading) {
   font-size: 60px;
   line-height: 60px;
 

@@ -17,9 +17,9 @@
       "time": 1311618057
     },
     "app.manifest": {
-      "sha1": "c0b9784229c1191d3e79c1e56ab9df189d36ef32",
-      "size": 1139,
-      "time": 1311709643
+      "sha1": "cd2986a6522aa7e167332b9ad27cb84389d9fe09",
+      "size": 1128,
+      "time": 1311723943
     },
     "images/colorbar.png": {
       "sha1": "e82f12a3d39d2c8e367b88aea5733d83bb85e2ed",
@@ -72,9 +72,9 @@
       "time": 1311618059
     },
     "index.html": {
-      "sha1": "de55b863fd2658b4589af814a1ee8d81c6a14876",
-      "size": 12085,
-      "time": 1311701583
+      "sha1": "9127060307d5323f5cc2b45c08bc3319015d2145",
+      "size": 2399,
+      "time": 1311720953
     },
     "markdown.txt": {
       "sha1": "24e62905a54573c68051992d2260dbaa72d24774",
@@ -87,9 +87,9 @@
       "time": 1311618060
     },
     "scripts/main.js": {
-      "sha1": "a7402ae2617ba4e66cd4e72900586edff73c46d4",
-      "size": 2486,
-      "time": 1311701006
+      "sha1": "fbfd7872a7fc46d65b521206f67f2a3e50ac1758",
+      "size": 4647,
+      "time": 1311723762
     },
     "scripts/namespace-plus.js": {
       "sha1": "518bbbfa7cc7e20367ec906649d05a3a6a6f2483",
@@ -117,34 +117,34 @@
       "time": 1311618063
     },
     "scripts/slides.js": {
-      "sha1": "f1c29f6587f97643bbffead3efa7b99d90e7e74d",
-      "size": 17309,
-      "time": 1311709470
+      "sha1": "fe5d09b1120629ccbf30d17a89bd98a6b868b5bb",
+      "size": 17359,
+      "time": 1311723480
     },
     "scripts/wiki-all.js": {
-      "sha1": "0b768808dcc870444d59de9c2b23114b8d9f2579",
-      "size": 57008,
-      "time": 1311701009
+      "sha1": "e6040ea1086cfa29d204bca4ea4bb4090b1c873e",
+      "size": 59169,
+      "time": 1311723764
     },
     "scripts/wiki-all.min.js": {
-      "sha1": "bf01feeadcc0170bb1dd188af65d2b092e4c4459",
-      "size": 15393,
-      "time": 1311701009
+      "sha1": "73c69fb177d4157b9ae19c0cb916a60e63e11412",
+      "size": 16497,
+      "time": 1311723764
+    },
+    "slides.html": {
+      "sha1": "6273ec41b6f81f3f4eb1484b8da9f59ead4f366e",
+      "size": 7588,
+      "time": 1311710884
     },
     "styles/main.css": {
-      "sha1": "f73cc5d77e45c7714a0b3a5c0f3eb5e3cc23cc2e",
-      "size": 1768,
-      "time": 1311701724
-    },
-    "styles/mini-styles.css": {
-      "sha1": "1598ddfc88129c2a5bfd37abea4a4690f9510ebd",
-      "size": 15757,
-      "time": 1311703466
+      "sha1": "3f4f7d9dc3330c7d518aa58a1dd1ed89e75ef3c2",
+      "size": 1794,
+      "time": 1311723160
     },
     "styles/styles.css": {
-      "sha1": "7715ce15abd9b16dabcb0b1c681ecc6fd7cbe7f1",
-      "size": 11970,
-      "time": 1311709640
+      "sha1": "70d87c0c436b138b5f5c23d9d5d94dd56388ceae",
+      "size": 11989,
+      "time": 1311723662
     }
   },
   "secret": "50b25469502561f22e73fa5258e934a4dd7bfa0a",

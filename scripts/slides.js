@@ -18,6 +18,8 @@ var PM_TOUCH_SENSITIVITY = 15;
 
 var curSlide;
 
+var handleLocationHash = namespace.lookup('com.pageforest.html5slides.handleLocationHash');
+
 /* ---------------------------------------------------------------------- */
 /* classList polyfill by Eli Grey 
  * (http://purl.eligrey.com/github/classList.js/blob/master/classList.js) */
@@ -467,7 +469,7 @@ function speakPrevItem() {
 /* Hash functions */
 
 function getCurSlideFromHash() {
-    var slideNo = parseInt(location.hash.substr(1));
+    slideNo = handleLocationHash().page;
 
     if (slideNo) {
         curSlide = slideNo - 1;
@@ -477,12 +479,15 @@ function getCurSlideFromHash() {
 };
 
 function updateHash() {
-    location.replace('#' + (curSlide + 1));
+    handleLocationHash({page: curSlide + 1});
 };
 
 /* Event listeners */
 
 function handleBodyKeyDown(event) {
+    if (document.activeElement != document.body) {
+        return;
+    }
     switch (event.keyCode) {
     case 39: // right arrow
     case 13: // Enter
@@ -611,11 +616,6 @@ function initialize() {
     } else {
         document.addEventListener('DOMContentLoaded', handleDomLoaded, false);
     }
-    setInterval(function () {
-        var k = 0;
-        k += 1;
-        handleDomLoaded();
-    }, 2000);
 }
 
 // If ?debug exists then load the script relative instead of absolute
