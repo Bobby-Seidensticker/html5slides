@@ -1781,7 +1781,7 @@ var escapeCharacters_callback = function(wholeMatch,m1) {
 
 } // end of Showdown.converter
 /* Source: scripts/main.js */
-namespace.module('com.pageforest.wiki', function (exports, require) {
+namespace.module('com.pageforest.html5slides', function (exports, require) {
 var clientLib = require('com.pageforest.client');
 var dom = require('org.startpad.dom');
 var nsdoc = require('org.startpad.nsdoc');
@@ -1847,16 +1847,6 @@ function onReady() {
     $(doc.edit).click(toggleEditor);
 
     setInterval(onEditChange, syncTime * 1000);
-
-    $.ajax({
-        url: '/google/index.html',
-        error: function(result, status) {
-            console.log('ajax error');
-        },
-        success: function (slideshow) {
-            $('#editor').append(format.escapeHTML(slideshow));
-        }
-    });
 }
 
 function updateMeta(json) {

@@ -1,6 +1,11 @@
 {
   "application": "html5slides",
   "files": {
+    "README": {
+      "sha1": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+      "size": 0,
+      "time": 1311699036
+    },
     "README.md": {
       "sha1": "bca70e777984e2416255413296926c82fd1813f5",
       "size": 446,
@@ -12,9 +17,39 @@
       "time": 1311618057
     },
     "app.manifest": {
-      "sha1": "ca9989f76b7bb836456e6356c7021a2b0d8894d2",
-      "size": 1018,
-      "time": 1311634675
+      "sha1": "c0b9784229c1191d3e79c1e56ab9df189d36ef32",
+      "size": 1139,
+      "time": 1311709643
+    },
+    "images/colorbar.png": {
+      "sha1": "e82f12a3d39d2c8e367b88aea5733d83bb85e2ed",
+      "size": 213,
+      "time": 1311709557
+    },
+    "images/example-cat.jpg": {
+      "sha1": "828079719809e248be72e6b0f6aa5949d213e636",
+      "size": 386632,
+      "time": 1311698798
+    },
+    "images/example-graph.png": {
+      "sha1": "8e41355d2fda1c3566de3dd899b909cca963c383",
+      "size": 26957,
+      "time": 1311698810
+    },
+    "images/google-logo-small.png": {
+      "sha1": "83434ae21d6c4a73bc096c361ce2fcb19c4fb54a",
+      "size": 8466,
+      "time": 1311709585
+    },
+    "images/google-logo.png": {
+      "sha1": "2684e3393ccc8bdad5199dda6fbb8e5ffea51546",
+      "size": 31769,
+      "time": 1311709592
+    },
+    "images/googleio-logo.png": {
+      "sha1": "eb0f688c54725238751dc7f763044447da6fb944",
+      "size": 84742,
+      "time": 1311709599
     },
     "images/gradient.jpg": {
       "sha1": "dd8b3692f486e9a3ac07b2320ef27978a197a796",
@@ -37,9 +72,9 @@
       "time": 1311618059
     },
     "index.html": {
-      "sha1": "10c1fef1c601c4b79e90ef683b186a56057dc6aa",
-      "size": 10119,
-      "time": 1311634549
+      "sha1": "de55b863fd2658b4589af814a1ee8d81c6a14876",
+      "size": 12085,
+      "time": 1311701583
     },
     "markdown.txt": {
       "sha1": "24e62905a54573c68051992d2260dbaa72d24774",
@@ -51,20 +86,10 @@
       "size": 3441,
       "time": 1311618060
     },
-    "scripts/combined.js": {
-      "sha1": "ebde4a530c48b1ca129f03eeb8a29d5155b18919",
-      "size": 47166,
-      "time": 1311618061
-    },
-    "scripts/combined.min.js": {
-      "sha1": "25a6e492c98d92188e7e94c638dfb58cb4c5d576",
-      "size": 10824,
-      "time": 1311618061
-    },
     "scripts/main.js": {
-      "sha1": "26908157a96f0c45707a03288448cd2b6a9d9a3e",
-      "size": 2748,
-      "time": 1311626256
+      "sha1": "a7402ae2617ba4e66cd4e72900586edff73c46d4",
+      "size": 2486,
+      "time": 1311701006
     },
     "scripts/namespace-plus.js": {
       "sha1": "518bbbfa7cc7e20367ec906649d05a3a6a6f2483",
@@ -92,34 +117,34 @@
       "time": 1311618063
     },
     "scripts/slides.js": {
-      "sha1": "f27328dd9c4923270914340faaf0355217fe2b4b",
-      "size": 17229,
-      "time": 1311628402
+      "sha1": "f1c29f6587f97643bbffead3efa7b99d90e7e74d",
+      "size": 17309,
+      "time": 1311709470
     },
     "scripts/wiki-all.js": {
-      "sha1": "552000448f57d4e8baebb342f53dddbfb7bac240",
-      "size": 57263,
-      "time": 1311626259
+      "sha1": "0b768808dcc870444d59de9c2b23114b8d9f2579",
+      "size": 57008,
+      "time": 1311701009
     },
     "scripts/wiki-all.min.js": {
-      "sha1": "ecd8a39a16a19e487053abfc212862900afc0770",
-      "size": 15535,
-      "time": 1311626259
+      "sha1": "bf01feeadcc0170bb1dd188af65d2b092e4c4459",
+      "size": 15393,
+      "time": 1311701009
     },
     "styles/main.css": {
-      "sha1": "d0a25372007158ea98d5dca243dc52e142abaff9",
-      "size": 1693,
-      "time": 1311618064
+      "sha1": "f73cc5d77e45c7714a0b3a5c0f3eb5e3cc23cc2e",
+      "size": 1768,
+      "time": 1311701724
+    },
+    "styles/mini-styles.css": {
+      "sha1": "1598ddfc88129c2a5bfd37abea4a4690f9510ebd",
+      "size": 15757,
+      "time": 1311703466
     },
     "styles/styles.css": {
-      "sha1": "f1687a66c48baebd5081ed385d3461926ca5488a",
-      "size": 11945,
-      "time": 1311633170
-    },
-    "wikiindex.html": {
-      "sha1": "36d53157e7a21d87776e45a93d34a304ed999c57",
-      "size": 1928,
-      "time": 1311622558
+      "sha1": "7715ce15abd9b16dabcb0b1c681ecc6fd7cbe7f1",
+      "size": 11970,
+      "time": 1311709640
     }
   },
   "secret": "50b25469502561f22e73fa5258e934a4dd7bfa0a",

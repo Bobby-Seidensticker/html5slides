@@ -63,16 +63,6 @@ function onReady() {
     $(doc.edit).click(toggleEditor);
 
     setInterval(onEditChange, syncTime * 1000);
-
-    $.ajax({
-        url: '/google/index.html',
-        error: function(result, status) {
-            console.log('ajax error');
-        },
-        success: function (slideshow) {
-            $('#editor').append(format.escapeHTML(slideshow));
-        }
-    });
 }
 
 function updateMeta(json) {

@@ -68,7 +68,6 @@
 
     <div id="outputBlock">
       <div id="output">
-      </div>
 
 
     <section class='slides layout-regular template-default'>
@@ -402,6 +401,9 @@
     </section>
 
 
+
+
+      </div>
     </div>
 
     <div id="footer">

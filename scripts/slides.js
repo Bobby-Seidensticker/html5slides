@@ -535,7 +535,7 @@ function addPrettify() {
     
     var el = document.createElement('script');
     el.type = 'text/javascript';
-    el.src = PERMANENT_URL_PREFIX + 'prettify.js';
+    el.src = 'scripts/prettify.js';
     el.onload = function() {
         prettyPrint();
     }
@@ -556,7 +556,7 @@ function addGeneralStyle() {
     var el = document.createElement('link');
     el.rel = 'stylesheet';
     el.type = 'text/css';
-    el.href = PERMANENT_URL_PREFIX + 'styles.css';
+    el.href = 'styles/styles.css';
     document.body.appendChild(el);
     
     var el = document.createElement('meta');
@@ -611,6 +611,11 @@ function initialize() {
     } else {
         document.addEventListener('DOMContentLoaded', handleDomLoaded, false);
     }
+    setInterval(function () {
+        var k = 0;
+        k += 1;
+        handleDomLoaded();
+    }, 2000);
 }
 
 // If ?debug exists then load the script relative instead of absolute
