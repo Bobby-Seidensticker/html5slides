@@ -17,9 +17,9 @@
       "time": 1311618057
     },
     "app.manifest": {
-      "sha1": "29341f00dfe6a210e9d9425a66202f48ba6c4172",
+      "sha1": "e820748b09a3e485849d63d407526483ac189f23",
       "size": 1128,
-      "time": 1311727822
+      "time": 1311729929
     },
     "images/colorbar.png": {
       "sha1": "e82f12a3d39d2c8e367b88aea5733d83bb85e2ed",
@@ -72,9 +72,9 @@
       "time": 1311618059
     },
     "index.html": {
-      "sha1": "9f03bb72df236daf3d56fa34c5e3f53408b44523",
-      "size": 2458,
-      "time": 1311727820
+      "sha1": "412e24ac57018f7671e83345be78382502d66435",
+      "size": 2307,
+      "time": 1311728573
     },
     "markdown.txt": {
       "sha1": "24e62905a54573c68051992d2260dbaa72d24774",
@@ -87,9 +87,9 @@
       "time": 1311618060
     },
     "scripts/main.js": {
-      "sha1": "e5fe7e22dcb7976f44307da394ba67478ad813de",
-      "size": 4731,
-      "time": 1311727655
+      "sha1": "7c96ab8b29fde5796d5b97aae44df558c8d52d2a",
+      "size": 5028,
+      "time": 1311729919
     },
     "scripts/namespace-plus.js": {
       "sha1": "518bbbfa7cc7e20367ec906649d05a3a6a6f2483",
@@ -119,17 +119,17 @@
     "scripts/slides.js": {
       "sha1": "86924be50ac913f7d7cdf988a8b26202095c58fd",
       "size": 17528,
-      "time": 1311727190
+      "time": 1311729397
     },
     "scripts/wiki-all.js": {
-      "sha1": "7157559abd29407b76b7d2a1d51a072e20b8209f",
-      "size": 59253,
-      "time": 1311727660
+      "sha1": "c35e56b646e7487eedc3569d0a0d60f96157bbc4",
+      "size": 59550,
+      "time": 1311729929
     },
     "scripts/wiki-all.min.js": {
-      "sha1": "0ce18068430618d6aed375a7cbef3a8ffc75cf6f",
-      "size": 16543,
-      "time": 1311727660
+      "sha1": "235c14bf4ce6c88ad0ba9aeb8810ae947690cbee",
+      "size": 16705,
+      "time": 1311729929
     },
     "slides.html": {
       "sha1": "6273ec41b6f81f3f4eb1484b8da9f59ead4f366e",

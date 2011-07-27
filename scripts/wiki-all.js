@@ -1806,9 +1806,14 @@ var syncTime = 5;
 var editVisible = false;
 var editorInitialized = false;
 
-var slideScript;
-var outputHeight;
+var renderedText = "";
+var editTimer;
+var EDIT_BUFFER = 2000;   // ms
+
 var HEIGHT = 700;
+var H_TO_W_EDIT = .77;
+var H_TO_W_NOT_EDIT = .50;
+
 
 function getDocid() {
     return handleLocationHash().doc;
@@ -1858,12 +1863,17 @@ function handleLocationHash(obj) {
 }
 
 function onEditChange() {
+    if (editTimer) {
+        clearTimeout(editTimer);
+    }
     var newText = doc.editor.value;
-    if (newText == lastText) {
+    if (newText == renderedText) {
+        lastText = newText;
         return;
     }
     client.setDirty();
     lastText = newText;
+    editTimer = setTimeout(render, EDIT_BUFFER);
 /*
     try {
         doc.output.innerHTML = markdown.makeHtml(newText);
@@ -1876,6 +1886,7 @@ function onEditChange() {
 function render() {
     $('#output').empty();
     $('#output').append(lastText);
+    renderedText = lastText;
     refresh();
     onResize();
 }
@@ -1923,13 +1934,13 @@ function onReady() {
         success: function(slides) {
             $('#output').append(slides);
             $('#editor')[0].innerHTML = slides;
-            slideScript = document.createElement('script');
-            slideScript.type = 'text/javascript';
-            slideScript.src = 'scripts/slides.js';
-            slideScript.onload = function() {
+            var el = document.createElement('script');
+            el.type = 'text/javascript';
+            el.src = 'scripts/slides.js';
+            el.onload = function() {
                 handleDomLoaded();
             }
-            document.body.appendChild(slideScript);
+            document.body.appendChild(el);
             onResize();
         }
     });
@@ -1937,7 +1948,11 @@ function onReady() {
 }
 
 function onResize(evt) {
-    var height = parseFloat($('#outputBlock').css('width')) * .50;
+    var c = H_TO_W_NOT_EDIT;
+    if (editVisible) {
+        c = H_TO_W_EDIT;
+    }
+    var height = parseFloat($('#outputBlock').css('width')) * c;
     $('#output').children().css('webkit-transform', 'scale(' + height / HEIGHT + ')');
     $('#outputBlock').css('height', height);
 }

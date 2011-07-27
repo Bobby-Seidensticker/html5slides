@@ -587,6 +587,11 @@ function makeBuildLists() {
 };
 
 function handleDomLoaded() {
+    refresh(addEventListeners);
+};
+
+// Event Listeners bound only once
+function refresh(callInMiddleOfFunction) {
     slideEls = document.querySelectorAll('section.slides > article');
 
     setupFrames();
@@ -594,7 +599,9 @@ function handleDomLoaded() {
     addFontStyle();
     addGeneralStyle();
     addPrettify();
-    addEventListeners();
+    if (callInMiddleOfFunction) {
+        callInMiddleOfFunction();
+    }
 
     updateSlides();
 
@@ -602,7 +609,7 @@ function handleDomLoaded() {
     makeBuildLists();
 
     document.body.classList.add('loaded');
-};
+}
 
 function initialize() {
     getCurSlideFromHash();

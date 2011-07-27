@@ -22,10 +22,8 @@ var syncTime = 5;
 var editVisible = false;
 var editorInitialized = false;
 
-var renderedText = "";
-var editTimer;
-var EDIT_BUFFER = 1000;   // ms
-
+var slideScript;
+var outputHeight;
 var HEIGHT = 700;
 var H_TO_W_EDIT = .77;
 var H_TO_W_NOT_EDIT = .50;
@@ -79,17 +77,12 @@ function handleLocationHash(obj) {
 }
 
 function onEditChange() {
-    if (editTimer) {
-        clearTimeout(editTimer);
-    }
     var newText = doc.editor.value;
-    if (newText == renderedText) {
-        lastText = newText;
+    if (newText == lastText) {
         return;
     }
     client.setDirty();
     lastText = newText;
-    editTimer = setTimeout(render, EDIT_BUFFER);
 /*
     try {
         doc.output.innerHTML = markdown.makeHtml(newText);
@@ -102,7 +95,6 @@ function onEditChange() {
 function render() {
     $('#output').empty();
     $('#output').append(lastText);
-    renderedText = lastText;
     refresh();
     onResize();
 }
@@ -150,13 +142,13 @@ function onReady() {
         success: function(slides) {
             $('#output').append(slides);
             $('#editor')[0].innerHTML = slides;
-            var el = document.createElement('script');
-            el.type = 'text/javascript';
-            el.src = 'scripts/slides.js';
-            el.onload = function() {
+            slideScript = document.createElement('script');
+            slideScript.type = 'text/javascript';
+            slideScript.src = 'scripts/slides.js';
+            slideScript.onload = function() {
                 handleDomLoaded();
             }
-            document.body.appendChild(el);
+            document.body.appendChild(slideScript);
             onResize();
         }
     });
