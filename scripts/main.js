@@ -23,7 +23,6 @@ var editVisible = false;
 var editorInitialized = false;
 
 var slideScript;
-var refresh;
 var outputHeight;
 var HEIGHT = 700;
 
@@ -40,7 +39,10 @@ function handleLocationHash(obj) {
         doc,
         page;
     if (hash.search('doc=') > -1) {
-        doc = hash.replace('doc=', '')[0].split('&')[0];
+        doc = hash.replace('doc=', '');
+        if (doc.search('&') > -1) {
+            doc = doc.split('&')[0];
+        }
     }
     if (hash.search('page=') > -1) {
         page = hash.split('page=');
@@ -78,10 +80,6 @@ function onEditChange() {
     }
     client.setDirty();
     lastText = newText;
-    $('#output').empty();
-    $('#output').append(lastText);
-    onResize();
-    refresh();
 /*
     try {
         doc.output.innerHTML = markdown.makeHtml(newText);
@@ -89,6 +87,13 @@ function onEditChange() {
     } catch (e) {
         $(doc.output).text("Error: " + e.message);
     }*/
+}
+
+function render() {
+    $('#output').empty();
+    $('#output').append(lastText);
+    refresh();
+    onResize();
 }
 
 function toggleEditor(evt) {
@@ -106,6 +111,7 @@ function toggleEditor(evt) {
         }
         onResize();
     } else {
+        render();
         $(doc.page).removeClass('edit');
         onResize();
     }
@@ -121,6 +127,7 @@ function onReady() {
     client.addAppBar();
 
     $(doc.edit).click(toggleEditor);
+    $(doc.render).click(render);
 
     setInterval(onEditChange, syncTime * 1000);
 
@@ -137,7 +144,6 @@ function onReady() {
             slideScript.src = 'scripts/slides.js';
             slideScript.onload = function() {
                 handleDomLoaded();
-                refresh = handleDomLoaded;
             }
             document.body.appendChild(slideScript);
             onResize();

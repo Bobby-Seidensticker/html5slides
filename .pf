@@ -17,9 +17,9 @@
       "time": 1311618057
     },
     "app.manifest": {
-      "sha1": "cd2986a6522aa7e167332b9ad27cb84389d9fe09",
+      "sha1": "29341f00dfe6a210e9d9425a66202f48ba6c4172",
       "size": 1128,
-      "time": 1311723943
+      "time": 1311727822
     },
     "images/colorbar.png": {
       "sha1": "e82f12a3d39d2c8e367b88aea5733d83bb85e2ed",
@@ -72,9 +72,9 @@
       "time": 1311618059
     },
     "index.html": {
-      "sha1": "9127060307d5323f5cc2b45c08bc3319015d2145",
-      "size": 2399,
-      "time": 1311720953
+      "sha1": "9f03bb72df236daf3d56fa34c5e3f53408b44523",
+      "size": 2458,
+      "time": 1311727820
     },
     "markdown.txt": {
       "sha1": "24e62905a54573c68051992d2260dbaa72d24774",
@@ -87,9 +87,9 @@
       "time": 1311618060
     },
     "scripts/main.js": {
-      "sha1": "fbfd7872a7fc46d65b521206f67f2a3e50ac1758",
-      "size": 4647,
-      "time": 1311723762
+      "sha1": "e5fe7e22dcb7976f44307da394ba67478ad813de",
+      "size": 4731,
+      "time": 1311727655
     },
     "scripts/namespace-plus.js": {
       "sha1": "518bbbfa7cc7e20367ec906649d05a3a6a6f2483",
@@ -117,24 +117,24 @@
       "time": 1311618063
     },
     "scripts/slides.js": {
-      "sha1": "fe5d09b1120629ccbf30d17a89bd98a6b868b5bb",
-      "size": 17359,
-      "time": 1311723480
+      "sha1": "86924be50ac913f7d7cdf988a8b26202095c58fd",
+      "size": 17528,
+      "time": 1311727190
     },
     "scripts/wiki-all.js": {
-      "sha1": "e6040ea1086cfa29d204bca4ea4bb4090b1c873e",
-      "size": 59169,
-      "time": 1311723764
+      "sha1": "7157559abd29407b76b7d2a1d51a072e20b8209f",
+      "size": 59253,
+      "time": 1311727660
     },
     "scripts/wiki-all.min.js": {
-      "sha1": "73c69fb177d4157b9ae19c0cb916a60e63e11412",
-      "size": 16497,
-      "time": 1311723764
+      "sha1": "0ce18068430618d6aed375a7cbef3a8ffc75cf6f",
+      "size": 16543,
+      "time": 1311727660
     },
     "slides.html": {
       "sha1": "6273ec41b6f81f3f4eb1484b8da9f59ead4f366e",
       "size": 7588,
-      "time": 1311710884
+      "time": 1311726184
     },
     "styles/main.css": {
       "sha1": "3f4f7d9dc3330c7d518aa58a1dd1ed89e75ef3c2",
