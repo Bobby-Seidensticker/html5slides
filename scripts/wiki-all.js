@@ -1997,7 +1997,7 @@ function onSaveSuccess(json) {
 
 function setDoc(json) {
     if (index) {
-        document.body.innerHTML = json.markdown;
+        document.body.innerHTML = json.blob.markdown;
         var el = document.createElement('script');
         el.type = 'text/javascript';
         el.src = 'scripts/slides.js';

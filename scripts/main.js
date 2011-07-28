@@ -166,17 +166,6 @@ function onReady() {
     $(window).bind('resize', onResize);
 }
 
-function onReadyIndex() {
-    if (!document.location.hash) {
-        document.location = 'http://html5slides.pageforest.com/editor';
-    }
-    index = true;
-    handleAppCache();
-    doc = dom.bindIDs();
-    client = new clientLib.Client(exports);
-    client.saveInterval = 0;
-    $(document.body).addClass('index');
-}
 
 function onScroll() {
     if (editVisible) {
@@ -211,9 +200,21 @@ function onSaveSuccess(json) {
     updateMeta(client.meta);
 }
 
+function onReadyIndex() {
+    if (!document.location.hash) {
+        document.location = 'http://html5slides.pageforest.com/editor';
+    }
+    index = true;
+    handleAppCache();
+    doc = dom.bindIDs();
+    client = new clientLib.Client(exports);
+    client.saveInterval = 0;
+    $(document.body).addClass('index');
+}
+
 function setDoc(json) {
     if (index) {
-        document.body.innerHTML = json.markdown;
+        document.body.innerHTML = json.blob.markdown;
         var el = document.createElement('script');
         el.type = 'text/javascript';
         el.src = 'scripts/slides.js';
