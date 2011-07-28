@@ -125,6 +125,7 @@ function toggleEditor(evt) {
         }
         onResize();
     } else {
+        doc.output.style['-webkit-transform'] = 'translate(0, 0)';
         render();
         $(doc.page).removeClass('edit');
         onResize();
@@ -143,8 +144,6 @@ function onReady() {
     $(doc.edit).click(toggleEditor);
     $(window).bind('scroll', onScroll);
 
-    setInterval(onEditChange, syncTime * 1000);
-
     $.ajax({
         url: 'slides.html',
         error: function(result, status) {
@@ -152,7 +151,8 @@ function onReady() {
         },
         success: function(slides) {
             doc.output.innerHTML = slides;
-            doc.editor.innerHTML = slides;
+            doc.editor.value = slides;
+            renderedText = slides;
             var el = document.createElement('script');
             el.type = 'text/javascript';
             el.src = 'scripts/slides.js';
@@ -166,14 +166,10 @@ function onReady() {
     $(window).bind('resize', onResize);
 }
 
-
 function onScroll() {
     if (editVisible) {
         doc.output.style['-webkit-transform'] = 'translate(0, ' + window.scrollY + 'px)';
-    } else {
-        doc.output.style['-webkit-transform'] = 'translate(0, 0)';
     }
-    return;
 }
 
 function onResize(evt) {

@@ -1,8 +1,8 @@
 {
-  "application": "html5slides",
+  "application": "wiki",
   "cloneable": true,
   "icon": "images/icon.png",
-  "owner": "bobbys",
+  "owner": "mckoss",
   "readers": [
     "public"
   ],
@@ -13,7 +13,7 @@
     "demo",
     "pf:featured"
   ],
-  "title": "Html5Slides",
-  "url": "http://html5slides.pageforest.com/editor",
+  "title": "Wiki",
+  "url": "http://wiki.pageforest.com/",
   "writers": []
 }

@@ -5,6 +5,7 @@ var markdown = new Showdown.converter();
 
 exports.extend({
     'onReady': onReady,
+    'onReadyIndex': onReadyIndex,
     'getDoc': getDoc,
     'setDoc': setDoc,
     'onSaveSuccess': onSaveSuccess,
@@ -28,6 +29,7 @@ var EDIT_BUFFER = 1000;   // ms
 var HEIGHT = 700;
 var H_TO_W_EDIT = .77;
 var H_TO_W_NOT_EDIT = .50;
+var index = false;
 
 
 function getDocid() {
@@ -123,6 +125,7 @@ function toggleEditor(evt) {
         }
         onResize();
     } else {
+        doc.output.style['-webkit-transform'] = 'translate(0, 0)';
         render();
         $(doc.page).removeClass('edit');
         onResize();
@@ -141,8 +144,6 @@ function onReady() {
     $(doc.edit).click(toggleEditor);
     $(window).bind('scroll', onScroll);
 
-    setInterval(onEditChange, syncTime * 1000);
-
     $.ajax({
         url: 'slides.html',
         error: function(result, status) {
@@ -151,6 +152,7 @@ function onReady() {
         success: function(slides) {
             doc.output.innerHTML = slides;
             doc.editor.innerHTML = slides;
+            renderedText = slides;
             var el = document.createElement('script');
             el.type = 'text/javascript';
             el.src = 'scripts/slides.js';
@@ -167,10 +169,7 @@ function onReady() {
 function onScroll() {
     if (editVisible) {
         doc.output.style['-webkit-transform'] = 'translate(0, ' + window.scrollY + 'px)';
-    } else {
-        doc.output.style['-webkit-transform'] = 'translate(0, 0)';
     }
-    return;
 }
 
 function onResize(evt) {
@@ -188,8 +187,6 @@ function onResize(evt) {
     }
 }
 
-
-
 function updateMeta(json) {
     document.title = json.title;
     $('#title').text(json.title);
@@ -199,13 +196,39 @@ function onSaveSuccess(json) {
     updateMeta(client.meta);
 }
 
+function onReadyIndex() {
+    if (!document.location.hash) {
+        document.location = 'http://html5slides.pageforest.com/editor';
+    }
+    index = true;
+    handleAppCache();
+    doc = dom.bindIDs();
+    client = new clientLib.Client(exports);
+    client.saveInterval = 0;
+    $(document.body).addClass('index');
+}
+
 function setDoc(json) {
+    if (index) {
+        document.body.innerHTML = json.blob.markdown;
+        var el = document.createElement('script');
+        el.type = 'text/javascript';
+        el.src = 'scripts/slides.js';
+        el.onload = function() {
+            handleDomLoaded();
+        }
+        document.body.appendChild(el);
+        return;
+    }
     doc.editor.value = json.blob.markdown;
     onEditChange();
     updateMeta(json);
 }
 
 function getDoc() {
+    if (index) {
+        return;
+    }
     return {
         blob: {
             version: 1,
