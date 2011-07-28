@@ -17,9 +17,14 @@
       "time": 1311618057
     },
     "app.manifest": {
-      "sha1": "e820748b09a3e485849d63d407526483ac189f23",
-      "size": 1128,
-      "time": 1311729929
+      "sha1": "e34d77b8e09489564ef52fe4a7b4f851f02592dd",
+      "size": 1136,
+      "time": 1311814513
+    },
+    "editor": {
+      "sha1": "fa21edbeb272b48dfce7f981edebef4f7fc155e9",
+      "size": 2248,
+      "time": 1311812452
     },
     "images/colorbar.png": {
       "sha1": "e82f12a3d39d2c8e367b88aea5733d83bb85e2ed",
@@ -72,9 +77,9 @@
       "time": 1311618059
     },
     "index.html": {
-      "sha1": "412e24ac57018f7671e83345be78382502d66435",
-      "size": 2307,
-      "time": 1311728573
+      "sha1": "5e263b1e6c896067ceb67a62eb9f9b3aae98aa37",
+      "size": 837,
+      "time": 1311812449
     },
     "markdown.txt": {
       "sha1": "24e62905a54573c68051992d2260dbaa72d24774",
@@ -87,9 +92,9 @@
       "time": 1311618060
     },
     "scripts/main.js": {
-      "sha1": "7c96ab8b29fde5796d5b97aae44df558c8d52d2a",
-      "size": 5028,
-      "time": 1311729919
+      "sha1": "2753a7aff20cb688fc9b0fed1d06e4e562f8e616",
+      "size": 6323,
+      "time": 1311814509
     },
     "scripts/namespace-plus.js": {
       "sha1": "518bbbfa7cc7e20367ec906649d05a3a6a6f2483",
@@ -117,19 +122,19 @@
       "time": 1311618063
     },
     "scripts/slides.js": {
-      "sha1": "86924be50ac913f7d7cdf988a8b26202095c58fd",
-      "size": 17528,
-      "time": 1311729397
+      "sha1": "b31684ffbbcf28287059833363425ed5e4df610c",
+      "size": 17814,
+      "time": 1311789828
     },
     "scripts/wiki-all.js": {
-      "sha1": "c35e56b646e7487eedc3569d0a0d60f96157bbc4",
-      "size": 59550,
-      "time": 1311729929
+      "sha1": "585e735dbf69a67339901f946cb2d350a7b6a2b0",
+      "size": 54611,
+      "time": 1311814513
     },
     "scripts/wiki-all.min.js": {
-      "sha1": "235c14bf4ce6c88ad0ba9aeb8810ae947690cbee",
-      "size": 16705,
-      "time": 1311729929
+      "sha1": "57d42263669f149d179bb5520597c61258158e06",
+      "size": 15656,
+      "time": 1311814513
     },
     "slides.html": {
       "sha1": "6273ec41b6f81f3f4eb1484b8da9f59ead4f366e",
@@ -137,14 +142,14 @@
       "time": 1311726184
     },
     "styles/main.css": {
-      "sha1": "3f4f7d9dc3330c7d518aa58a1dd1ed89e75ef3c2",
-      "size": 1794,
-      "time": 1311723160
+      "sha1": "77da5347181ea2804e084d27ebca9383782e9881",
+      "size": 1534,
+      "time": 1311811335
     },
     "styles/styles.css": {
-      "sha1": "70d87c0c436b138b5f5c23d9d5d94dd56388ceae",
-      "size": 11989,
-      "time": 1311723662
+      "sha1": "0cb883e03b62e483c4cbff1443686754073d415c",
+      "size": 11998,
+      "time": 1311812636
     }
   },
   "secret": "50b25469502561f22e73fa5258e934a4dd7bfa0a",

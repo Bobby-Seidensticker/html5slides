@@ -4,8 +4,7 @@
       "scripts/namespace-plus.js",
       "scripts/autoresize.jquery.js",
       "scripts/showdown.js",
-      { "path": "scripts/main.js", "namespace": "com.pageforest.html5slides" },
-      "scripts/nsdoc.js"
+      { "path": "scripts/main.js", "namespace": "com.pageforest.html5slides" }
     ]
   },
   "minify": true,

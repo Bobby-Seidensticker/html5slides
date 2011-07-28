@@ -19,6 +19,7 @@ var PM_TOUCH_SENSITIVITY = 15;
 var curSlide;
 
 var handleLocationHash = namespace.lookup('com.pageforest.html5slides.handleLocationHash');
+var files = {};
 
 /* ---------------------------------------------------------------------- */
 /* classList polyfill by Eli Grey 
@@ -382,7 +383,7 @@ function setupFrames() {
 
 function setupInteraction() {
     /* Clicking and tapping */
-    
+
     var el = document.createElement('div');
     el.className = 'slide-area';
     el.id = 'prev-slide-area';  
@@ -537,7 +538,11 @@ function addPrettify() {
             el.classList.add('prettyprint');
         }
     }
-    
+
+    if (files.prettify) {
+        prettyPrint();
+        return;
+    }
     var el = document.createElement('script');
     el.type = 'text/javascript';
     el.src = 'scripts/prettify.js';
@@ -545,9 +550,13 @@ function addPrettify() {
         prettyPrint();
     }
     document.body.appendChild(el);
+    files.prettify = true;
 };
 
 function addFontStyle() {
+    if (files.fonts) {
+        return;
+    }
     var el = document.createElement('link');
     el.rel = 'stylesheet';
     el.type = 'text/css';
@@ -555,9 +564,15 @@ function addFontStyle() {
         'Open+Sans:regular,semibold,italic,italicsemibold|Droid+Sans+Mono';
 
     document.body.appendChild(el);
+    files.fonts = true;
 };
 
 function addGeneralStyle() {
+    if (files.styles) {
+        return;
+    }
+    files.styles = true;
+
     var el = document.createElement('link');
     el.rel = 'stylesheet';
     el.type = 'text/css';
@@ -587,11 +602,11 @@ function makeBuildLists() {
 };
 
 function handleDomLoaded() {
-    refresh(addEventListeners);
+    refresh(addEventListeners, setupInteraction);
 };
 
 // Event Listeners bound only once
-function refresh(callInMiddleOfFunction) {
+function refresh(addListeners, setupInt) {
     slideEls = document.querySelectorAll('section.slides > article');
 
     setupFrames();
@@ -599,13 +614,16 @@ function refresh(callInMiddleOfFunction) {
     addFontStyle();
     addGeneralStyle();
     addPrettify();
-    if (callInMiddleOfFunction) {
-        callInMiddleOfFunction();
+    if (addListeners) {
+        addListeners();
     }
 
     updateSlides();
 
-    setupInteraction();
+    if (setupInt) {
+        setupInt();
+    }
+
     makeBuildLists();
 
     document.body.classList.add('loaded');

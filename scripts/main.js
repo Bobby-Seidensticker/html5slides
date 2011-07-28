@@ -1,11 +1,11 @@
 var clientLib = require('com.pageforest.client');
 var dom = require('org.startpad.dom');
-var nsdoc = require('org.startpad.nsdoc');
 var format = require('org.startpad.format');
 var markdown = new Showdown.converter();
 
 exports.extend({
     'onReady': onReady,
+    'onReadyIndex': onReadyIndex,
     'getDoc': getDoc,
     'setDoc': setDoc,
     'onSaveSuccess': onSaveSuccess,
@@ -29,6 +29,7 @@ var EDIT_BUFFER = 1000;   // ms
 var HEIGHT = 700;
 var H_TO_W_EDIT = .77;
 var H_TO_W_NOT_EDIT = .50;
+var index = false;
 
 
 function getDocid() {
@@ -100,9 +101,11 @@ function onEditChange() {
 }
 
 function render() {
-    $('#output').empty();
-    $('#output').append(lastText);
+    if (editTimer) {
+        clearTimeout(editTimer);
+    }
     renderedText = lastText;
+    doc.output.innerHTML = lastText;
     refresh();
     onResize();
 }
@@ -138,7 +141,7 @@ function onReady() {
     client.addAppBar();
 
     $(doc.edit).click(toggleEditor);
-    $(doc.render).click(render);
+    $(window).bind('scroll', onScroll);
 
     setInterval(onEditChange, syncTime * 1000);
 
@@ -148,8 +151,8 @@ function onReady() {
             console.log('ajax load error');
         },
         success: function(slides) {
-            $('#output').append(slides);
-            $('#editor')[0].innerHTML = slides;
+            doc.output.innerHTML = slides;
+            doc.editor.innerHTML = slides;
             var el = document.createElement('script');
             el.type = 'text/javascript';
             el.src = 'scripts/slides.js';
@@ -163,17 +166,41 @@ function onReady() {
     $(window).bind('resize', onResize);
 }
 
-function onResize(evt) {
-    var c = H_TO_W_NOT_EDIT;
-    if (editVisible) {
-        c = H_TO_W_EDIT;
+function onReadyIndex() {
+    if (!document.location.hash) {
+        document.location = 'http://html5slides.pageforest.com/editor';
     }
-    var height = parseFloat($('#outputBlock').css('width')) * c;
-    $('#output').children().css('webkit-transform', 'scale(' + height / HEIGHT + ')');
-    $('#outputBlock').css('height', height);
+    index = true;
+    handleAppCache();
+    doc = dom.bindIDs();
+    client = new clientLib.Client(exports);
+    client.saveInterval = 0;
+    $(document.body).addClass('index');
 }
 
+function onScroll() {
+    if (editVisible) {
+        doc.output.style['-webkit-transform'] = 'translate(0, ' + window.scrollY + 'px)';
+    } else {
+        doc.output.style['-webkit-transform'] = 'translate(0, 0)';
+    }
+    return;
+}
 
+function onResize(evt) {
+    var height;
+    if (editVisible) {
+        height = parseFloat($('#outputBlock').css('width')) * H_TO_W_EDIT;
+        $(doc.output).children().css('-webkit-transform', 'scale(' + height / HEIGHT + ')');
+        $(doc.output).css('height', height);
+        $(doc.outputBlock).css('height', doc.editor.style.height);
+    } else {
+        height = parseFloat($('#outputBlock').css('width')) * H_TO_W_NOT_EDIT;
+        $(doc.output).children().css('-webkit-transform', 'scale(' + height / HEIGHT + ')');
+        $(doc.output).css('height', height);
+        $(doc.outputBlock).css('height', '100%');
+    }
+}
 
 function updateMeta(json) {
     document.title = json.title;
@@ -185,12 +212,26 @@ function onSaveSuccess(json) {
 }
 
 function setDoc(json) {
+    if (index) {
+        document.body.innerHTML = json.markdown;
+        var el = document.createElement('script');
+        el.type = 'text/javascript';
+        el.src = 'scripts/slides.js';
+        el.onload = function() {
+            handleDomLoaded();
+        }
+        document.body.appendChild(el);
+        return;
+    }
     doc.editor.value = json.blob.markdown;
     onEditChange();
     updateMeta(json);
 }
 
 function getDoc() {
+    if (index) {
+        return;
+    }
     return {
         blob: {
             version: 1,
