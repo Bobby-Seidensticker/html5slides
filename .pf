@@ -17,9 +17,9 @@
       "time": 1311892140
     },
     "app.manifest": {
-      "sha1": "d0226b45bf85d34e8767c88f651a2d4047a0f165",
+      "sha1": "10c8a387f24168d136994d87853f0a28d27e7405",
       "size": 1136,
-      "time": 1311893736
+      "time": 1311898317
     },
     "editor": {
       "sha1": "fa21edbeb272b48dfce7f981edebef4f7fc155e9",
@@ -92,9 +92,9 @@
       "time": 1311618060
     },
     "scripts/main.js": {
-      "sha1": "e25893732a28a3025535cf6991d8492f6c8cc471",
-      "size": 6285,
-      "time": 1311893732
+      "sha1": "5c57d8356ac83554dc453f1383a1a143c57c049c",
+      "size": 6377,
+      "time": 1311897900
     },
     "scripts/namespace-plus.js": {
       "sha1": "518bbbfa7cc7e20367ec906649d05a3a6a6f2483",
@@ -127,19 +127,19 @@
       "time": 1311789828
     },
     "scripts/wiki-all.js": {
-      "sha1": "670482c3185e64422b6974fe689972c20c5e817e",
-      "size": 54573,
-      "time": 1311893736
+      "sha1": "950ad088a220a4788aa7f548871529fc33d09a56",
+      "size": 54665,
+      "time": 1311897904
     },
     "scripts/wiki-all.min.js": {
-      "sha1": "a59dad7e126f1e34ccfd5c339d1c31e114b3ddca",
-      "size": 15673,
-      "time": 1311893736
+      "sha1": "e69877c984150c9bc5c669b6df4261c3e426ced6",
+      "size": 15873,
+      "time": 1311897904
     },
     "slides.html": {
-      "sha1": "6273ec41b6f81f3f4eb1484b8da9f59ead4f366e",
-      "size": 7588,
-      "time": 1311726184
+      "sha1": "67c2dd2b8df0eb62a93cfa9d69fbcf70b13a6b5d",
+      "size": 6869,
+      "time": 1311897041
     },
     "styles/main.css": {
       "sha1": "77da5347181ea2804e084d27ebca9383782e9881",
