@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html manifest="/app.manifest">
 
 <!--    Google HTML5 slide template adapted for real-time
         editing in the format of wiki.pageforest.com     -->
@@ -13,9 +14,6 @@
 
         URL: http://code.google.com/p/html5slides/ -->
 
-<!--
-<html manifest="/app.manifest">
--->
 <head>
 <title>Editable HTML5 Slides</title>
 
@@ -28,7 +26,7 @@
 <link rel="stylesheet" type="text/css" href="/lib/beta/css/client.css" />
 
 <script type="text/javascript" src="/lib/beta/js/pf-client.js"></script>
-<script type="text/javascript" src="/scripts/wiki-all.js"></script>
+<script type="text/javascript" src="/scripts/all.js"></script>
 
 
 <script type="text/javascript">
@@ -40,7 +38,7 @@
 <body>
   <div id="page">
     <h1 id="page-heading">
-      <span id="title">New Wiki</span>
+      <span id="title">New Presentation</span>
       <span class="menu-bar">
         <select id=select>
           <option value=title>Title</option>

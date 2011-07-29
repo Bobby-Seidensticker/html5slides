@@ -1,6 +1,6 @@
 {
   "files": {
-    "scripts/wiki-all.js": [
+    "scripts/all.js": [
       "scripts/namespace-plus.js",
       "scripts/autoresize.jquery.js",
       "scripts/showdown.js",
