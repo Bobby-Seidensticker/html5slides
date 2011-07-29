@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html manifest="/app.manifest">
+<html manifest="/x-app.manifest">
 
 <!--    Google HTML5 slide template adapted for real-time
         editing in the format of wiki.pageforest.com     -->
@@ -41,8 +41,8 @@
       <span id="title">New Presentation</span>
       <span class="menu-bar">
         <select id=select>
-          <option value=title>Title</option>
-          <option value=basic>Basic</option>
+          <option value=title>Large Title</option>
+          <option value=basic>Basic Bullets and Paragraphs</option>
           <option value=code>Inline Black Code</option>
           <option value=codePretty>Block Pretty Code</option>
           <option value=basicBullet>Bulleted List</option>
@@ -55,10 +55,11 @@
           <option value=image>Image</option>
           <option value=imageCenter>Image Center</option>
           <option value=imageFill>Image Fill</option>
-          <option></option>
-          <option></option>
-          <option></option>
+          <option value=quote>Quote</option>
+          <option value=embed>Embeded Webpage</option>
+          <option value=embedFull>Embeded Webpage Full</option>
         </select>
+        <input type="button" id="insert" value="insert"/>
         <input type="button" id="edit" value="edit"/>
       </span>
     </h1>

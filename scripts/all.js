@@ -1806,11 +1806,12 @@ var syncTime = 5;
 var editVisible = false;
 var editorInitialized = false;
 
-var renderedText = "";
 var editTimer;
 var EDIT_BUFFER = 1000;   // ms
 
-var HEIGHT = 700;
+
+var currentScale;
+var currentScroll = 0;
 var H_TO_W_EDIT = .77;
 var H_TO_W_NOT_EDIT = .50;
 var index = false;
@@ -1874,8 +1875,7 @@ function onEditChange() {
         clearTimeout(editTimer);
     }
     var newText = doc.editor.value;
-    if (newText == renderedText) {
-        lastText = newText;
+    if (newText == lastText) {
         return;
     }
     client.setDirty();
@@ -1887,7 +1887,6 @@ function render() {
     if (editTimer) {
         clearTimeout(editTimer);
     }
-    renderedText = lastText;
     doc.output.innerHTML = wrap(lastText);
     refresh();
     onResize();
@@ -1908,9 +1907,9 @@ function toggleEditor(evt) {
         }
         onResize();
     } else {
-        doc.output.style['-webkit-transform'] = 'translate(0, 0)';
         render();
         $(doc.page).removeClass('edit');
+        currentScroll = 0;
         onResize();
     }
     $(doc.edit).val(editVisible ? 'hide' : 'edit');
@@ -1935,7 +1934,7 @@ function onReady() {
         success: function(slides) {
             doc.output.innerHTML = wrap(slides);
             doc.editor.value = slides;
-            renderedText = slides;
+            lastText = slides;
             var el = document.createElement('script');
             el.type = 'text/javascript';
             el.src = 'scripts/slides.js';
@@ -1951,23 +1950,29 @@ function onReady() {
 
 function onScroll() {
     if (editVisible) {
-        doc.output.style['-webkit-transform'] = 'translate(0, ' + window.scrollY + 'px)';
+        currentScroll = window.scrollY;
+        setCrossTransform(doc.output, 'transform');
     }
 }
 
 function onResize(evt) {
-    var height;
+    var width = editVisible ? 900 : 1300;
+    currentScale = doc.outputBlock.offsetWidth / width;
     if (editVisible) {
-        height = parseFloat($('#outputBlock').css('width')) * H_TO_W_EDIT;
-        $(doc.output).children().css('-webkit-transform', 'scale(' + height / HEIGHT + ')');
-        $(doc.output).css('height', height);
-        $(doc.outputBlock).css('height', doc.editor.style.height);
+        $(doc.outputBlock).css('height', doc.editor.offsetHeight);
     } else {
-        height = parseFloat($('#outputBlock').css('width')) * H_TO_W_NOT_EDIT;
-        $(doc.output).children().css('-webkit-transform', 'scale(' + height / HEIGHT + ')');
-        $(doc.output).css('height', height);
-        $(doc.outputBlock).css('height', '100%');
+        $(doc.outputBlock).css('height', (currentScale * 700) + 'px');
     }
+    setCrossTransform(doc.output, 'transform');
+}
+
+function setCrossTransform(elem, type) {
+    var val = 'translate(0, ' + currentScroll + 'px) scale(' + currentScale + ')';
+    $(elem).css('-webkit-' + type, val);
+    $(elem).css('-moz-' + type, val);
+    $(elem).css('-o-' + type, val);
+    $(elem).css('-ms-' + type, val);
+    $(elem).css(type, val);
 }
 
 function updateMeta(json) {

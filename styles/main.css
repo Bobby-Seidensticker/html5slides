@@ -35,10 +35,22 @@ span.menu-bar {
 }
 
 #inputBlock { width: 48%; float: right; }
+#page #outputBlock { overflow: hidden;}
 #page.edit #outputBlock { width: 48%; float: left; margin: 0; }
-#page #outputBlock { overflow: hidden; }
+#page:not(.edit) #outputBlock { width: 100%; }
 
-#output { position: relative; width: 100%; -webkit-transition: .2s }
+#output {
+  position: relative;
+  -webkit-transition: -webkit-transform .2s;
+  height: 700px;
+  -webkit-transform-origin: top left; 
+  -moz-transform-origin: top left; 
+  -o-transform-origin: top left; 
+  -ms-transform-origin: top left; 
+  transform-origin: top left;
+}
+#page.edit #output { width: 900px; }
+#page:not(.edit) #output { width: 1300px; }
 
 #output table {
     border-collapse: collapse;
@@ -69,6 +81,6 @@ textarea {
 
 #footer {
     clear: both;
-    margin: 10px 0;
+    margin: 10px 10px;
     text-align:center;
 }
