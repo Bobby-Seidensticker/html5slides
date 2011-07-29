@@ -1814,6 +1814,9 @@ var HEIGHT = 700;
 var H_TO_W_EDIT = .77;
 var H_TO_W_NOT_EDIT = .50;
 var index = false;
+var wrap = function (articles) {
+    return "<section class='slides'>" + articles + "</section>";
+}
 
 
 function getDocid() {
@@ -1828,6 +1831,9 @@ function handleLocationHash(obj) {
     var hash = document.location.hash.replace(/#/, ''),
         doc,
         page;
+    if (hash.length > 0 && hash.search('doc=') == -1 && hash.search('page=') == -1) {
+        document.location = location.href.replace('#' + hash, '#doc=' + hash);
+    }
     if (hash.search('doc=') > -1) {
         doc = hash.replace('doc=', '');
         if (doc.search('&') > -1) {
@@ -1875,13 +1881,6 @@ function onEditChange() {
     client.setDirty();
     lastText = newText;
     editTimer = setTimeout(render, EDIT_BUFFER);
-/*
-    try {
-        doc.output.innerHTML = markdown.makeHtml(newText);
-        nsdoc.updateScriptSections(doc.output);
-    } catch (e) {
-        $(doc.output).text("Error: " + e.message);
-    }*/
 }
 
 function render() {
@@ -1889,7 +1888,7 @@ function render() {
         clearTimeout(editTimer);
     }
     renderedText = lastText;
-    doc.output.innerHTML = lastText;
+    doc.output.innerHTML = wrap(lastText);
     refresh();
     onResize();
 }
@@ -1934,7 +1933,7 @@ function onReady() {
             console.log('ajax load error');
         },
         success: function(slides) {
-            doc.output.innerHTML = slides;
+            doc.output.innerHTML = wrap(slides);
             doc.editor.value = slides;
             renderedText = slides;
             var el = document.createElement('script');
@@ -1994,7 +1993,7 @@ function onReadyIndex() {
 
 function setDoc(json) {
     if (index) {
-        document.body.innerHTML = json.blob.markdown;
+        document.body.innerHTML = wrap(json.blob.markdown);
         var el = document.createElement('script');
         el.type = 'text/javascript';
         el.src = 'scripts/slides.js';
