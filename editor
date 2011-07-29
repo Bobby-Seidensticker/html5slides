@@ -42,6 +42,25 @@
     <h1 id="page-heading">
       <span id="title">New Wiki</span>
       <span class="menu-bar">
+        <select id=select>
+          <option value=title>Title</option>
+          <option value=basic>Basic</option>
+          <option value=code>Inline Black Code</option>
+          <option value=codePretty>Block Pretty Code</option>
+          <option value=basicBullet>Bulleted List</option>
+          <option value=builds>Builds with Action</option>
+          <option value=buildP>Paragraphs that Build</option>
+          <option value=smaller>Small font</option>
+          <option value=table>With Table</option>
+          <option value=styles>With Styles</option>
+          <option value=segue>Segue Slide</option>
+          <option value=image>Image</option>
+          <option value=imageCenter>Image Center</option>
+          <option value=imageFill>Image Fill</option>
+          <option></option>
+          <option></option>
+          <option></option>
+        </select>
         <input type="button" id="edit" value="edit"/>
       </span>
     </h1>
