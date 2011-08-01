@@ -194,6 +194,8 @@ function updateSlides() {
             break;
         }
     }
+    // update position UI
+    document.getElementById('pos').innerHTML = (curSlide + 1) + ' / ' + (slideEls.length);
 
     triggerLeaveEvent(curSlide - 1);
     triggerEnterEvent(curSlide);
@@ -548,9 +550,9 @@ function addPrettify() {
     el.src = 'scripts/prettify.js';
     el.onload = function() {
         prettyPrint();
+        files.prettify = true;
     }
     document.body.appendChild(el);
-    files.prettify = true;
 };
 
 function addFontStyle() {

@@ -70,6 +70,11 @@
 
     <div id="outputBlock">
       <div id="output"></div>
+      <div id="nav">
+        <input type="button" id="prev" value="prev"/>
+        <div id=pos></div>
+        <input type="button" id="next" value="next"/>
+      </div>
     </div>
 
     <div id="footer">

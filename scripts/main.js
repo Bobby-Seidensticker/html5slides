@@ -139,7 +139,8 @@ function render() {
     if (editTimer) {
         clearTimeout(editTimer);
     }
-    doc.output.innerHTML = wrap(lastText);
+    $(doc.output).children('section').remove();
+    $(doc.output).append(wrap(lastText));
     refresh();
     onResize();
 }
@@ -153,9 +154,7 @@ function toggleEditor(evt) {
         // since the original textarea is hidden.
         if (!editorInitialized) {
             editorInitialized = true;
-            $(doc.editor)
-                .bind('keyup', onEditChange)
-                .autoResize({limit: 10000});
+            $(doc.editor).bind('keyup', onEditChange);
         }
         onResize();
     } else {
@@ -169,7 +168,6 @@ function toggleEditor(evt) {
 
 function insertStockCode() {
     $(doc.editor).val($(doc.editor).val() + stockCode[$(doc.select).val()]);
-    $(doc.editor).autoResize({limit: 10000});
 }
 
 function onReady() {
@@ -190,17 +188,18 @@ function onReady() {
             console.log('ajax load error');
         },
         success: function(slides) {
-            doc.output.innerHTML = wrap(slides);
-            doc.editor.value = slides;
             lastText = slides;
+            doc.editor.value = slides;
             var el = document.createElement('script');
             el.type = 'text/javascript';
             el.src = 'scripts/slides.js';
             el.onload = function() {
+                render();
                 handleDomLoaded();
+                $(doc.next).click(nextSlide);
+                $(doc.prev).click(prevSlide);
             }
             document.body.appendChild(el);
-            onResize();
         }
     });
     $(window).bind('resize', onResize);
@@ -210,6 +209,16 @@ function onScroll() {
     if (editVisible) {
         currentScroll = window.scrollY;
         setCrossTransform(doc.output, 'transform');
+        setTimeout(positionNav, 10);
+    }
+}
+
+function positionNav() {
+    if (editVisible) {
+        var topOfNav = doc.output.offsetHeight * currentScale + window.scrollY;
+        $(doc.nav).css('top', topOfNav + 'px');
+    } else {
+        $(doc.nav).css('top', (doc.outputBlock.offsetHeight - 45) + 'px');        
     }
 }
 
@@ -217,11 +226,13 @@ function onResize(evt) {
     var width = editVisible ? 900 : 1300;
     currentScale = doc.outputBlock.offsetWidth / width;
     if (editVisible) {
+        $(doc.editor).css('height', window.innerHeight - 140);
         $(doc.outputBlock).css('height', doc.editor.offsetHeight);
     } else {
-        $(doc.outputBlock).css('height', (currentScale * 700) + 'px');
+        $(doc.outputBlock).css('height', (currentScale * 700 + 50) + 'px');
     }
     setCrossTransform(doc.output, 'transform');
+    positionNav();
 }
 
 function setCrossTransform(elem, type) {

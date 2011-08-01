@@ -40,13 +40,13 @@ span.menu-bar {
 #page.edit #insert { display: visible; }
 
 #inputBlock { width: 48%; float: right; }
-#page #outputBlock { overflow: hidden;}
+#page #outputBlock { overflow: hidden; position: relative; }
 #page.edit #outputBlock { width: 48%; float: left; margin: 0; }
 #page:not(.edit) #outputBlock { width: 100%; }
 
 #output {
   position: relative;
-  -webkit-transition: -webkit-transform .2s;
+  -webkit-transition: -webkit-transform .05s;
   height: 700px;
   -webkit-transform-origin: top left; 
   -moz-transform-origin: top left; 
@@ -78,10 +78,24 @@ span.menu-bar {
     background-color: #F5F5DC;
 }
 
+#nav { width: 100%; height: 50px; position: absolute; }
+#nav #prev { float: left; }
+#nav #next { float: right; }
+#nav #pos { text-align: center; width: 100%; height: 100%; position: absolute; line-height: 50px; z-index: -1; }
+
+
+#page.edit #nav input { margin-top: 10px; width: 60px; height: 30px; }
+#page:not(.edit) #nav input { margin-top: 5px; width: 80px; height: 40px; }
+#page.edit #nav #pos { font-size: 14px; }
+#page:not(.edit) #nav #pos { font-size: 16px; }
+
+
 textarea {
     font-family: "Courier New", Courier, monospace;
     font-size: inherit;
     width: 100%;
+    overflow-y: scroll;
+    resize: none;
 }
 
 #footer {

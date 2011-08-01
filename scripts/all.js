@@ -384,105 +384,6 @@ function format(st, args, re) {
     return st;
 }
 });
-/* Source: scripts/autoresize.jquery.js */
-/*
- * jQuery autoResize (textarea auto-resizer)
- * @copyright James Padolsey http://james.padolsey.com
- * @version 1.04
- */
-
-(function($){
-
-    $.fn.autoResize = function(options) {
-
-        // Just some abstracted details,
-        // to make plugin users happy:
-        var settings = $.extend({
-            onResize : function(){},
-            animate : true,
-            animateDuration : 150,
-            animateCallback : function(){},
-            extraSpace : 20,
-            limit: 1000
-        }, options);
-
-        // Only textarea's auto-resize:
-        this.filter('textarea').each(function(){
-
-                // Get rid of scrollbars and disable WebKit resizing:
-            var textarea = $(this).css({resize:'none','overflow-y':'hidden'}),
-
-                // Cache original height, for use later:
-                origHeight = textarea.height(),
-
-                // Need clone of textarea, hidden off screen:
-                clone = (function(){
-
-                    // Properties which may effect space taken up by chracters:
-                    var props = ['height','width','lineHeight','textDecoration','letterSpacing'],
-                        propOb = {};
-
-                    // Create object of styles to apply:
-                    $.each(props, function(i, prop){
-                        propOb[prop] = textarea.css(prop);
-                    });
-
-                    // Clone the actual textarea removing unique properties
-                    // and insert before original textarea:
-                    return textarea.clone().removeAttr('id').removeAttr('name').css({
-                        position: 'absolute',
-                        top: 0,
-                        left: -9999
-                    }).css(propOb).attr('tabIndex','-1').insertBefore(textarea);
-
-                })(),
-                lastScrollTop = null,
-                updateSize = function() {
-
-                    // Prepare the clone:
-                    clone.height(0).val($(this).val()).scrollTop(10000);
-
-                    // Find the height of text:
-                    var scrollTop = Math.max(clone.scrollTop(), origHeight) + settings.extraSpace,
-                        toChange = $(this).add(clone);
-
-                    // Check for limit:
-                    if ( scrollTop >= settings.limit ) {
-                        $(this).css('overflow-y','');
-                        scrollTop = settings.limit;
-                    }
-
-                    // Don't do anything if scrollTop hasen't changed:
-                    if (lastScrollTop === scrollTop) { return; }
-                    lastScrollTop = scrollTop;
-
-                    // Fire off callback:
-                    settings.onResize.call(this);
-
-                    // Either animate or directly apply height:
-                    settings.animate && textarea.css('display') === 'block' ?
-                        toChange.stop().animate({height:scrollTop}, settings.animateDuration, settings.animateCallback)
-                        : toChange.height(scrollTop);
-                };
-
-            // Bind namespaced handlers to appropriate events:
-            textarea
-                .unbind('.dynSiz')
-                .bind('keyup.dynSiz', updateSize)
-                .bind('keydown.dynSiz', updateSize)
-                .bind('change.dynSiz', updateSize)
-                .trigger('change.dynSiz');
-
-        });
-
-        // Chain:
-        return this;
-
-    };
-
-
-
-})(jQuery);
 /* Source: scripts/showdown.js */
 //
 // showdown.js -- A javascript port of Markdown.
@@ -1923,7 +1824,8 @@ function render() {
     if (editTimer) {
         clearTimeout(editTimer);
     }
-    doc.output.innerHTML = wrap(lastText);
+    $(doc.output).children('section').remove();
+    $(doc.output).append(wrap(lastText));
     refresh();
     onResize();
 }
@@ -1937,9 +1839,7 @@ function toggleEditor(evt) {
         // since the original textarea is hidden.
         if (!editorInitialized) {
             editorInitialized = true;
-            $(doc.editor)
-                .bind('keyup', onEditChange)
-                .autoResize({limit: 10000});
+            $(doc.editor).bind('keyup', onEditChange);
         }
         onResize();
     } else {
@@ -1953,7 +1853,6 @@ function toggleEditor(evt) {
 
 function insertStockCode() {
     $(doc.editor).val($(doc.editor).val() + stockCode[$(doc.select).val()]);
-    $(doc.editor).autoResize({limit: 10000});
 }
 
 function onReady() {
@@ -1974,17 +1873,18 @@ function onReady() {
             console.log('ajax load error');
         },
         success: function(slides) {
-            doc.output.innerHTML = wrap(slides);
-            doc.editor.value = slides;
             lastText = slides;
+            doc.editor.value = slides;
             var el = document.createElement('script');
             el.type = 'text/javascript';
             el.src = 'scripts/slides.js';
             el.onload = function() {
+                render();
                 handleDomLoaded();
+                $(doc.next).click(nextSlide);
+                $(doc.prev).click(prevSlide);
             }
             document.body.appendChild(el);
-            onResize();
         }
     });
     $(window).bind('resize', onResize);
@@ -1994,6 +1894,16 @@ function onScroll() {
     if (editVisible) {
         currentScroll = window.scrollY;
         setCrossTransform(doc.output, 'transform');
+        setTimeout(positionNav, 10);
+    }
+}
+
+function positionNav() {
+    if (editVisible) {
+        var topOfNav = doc.output.offsetHeight * currentScale + window.scrollY;
+        $(doc.nav).css('top', topOfNav + 'px');
+    } else {
+        $(doc.nav).css('top', (doc.outputBlock.offsetHeight - 45) + 'px');
     }
 }
 
@@ -2001,11 +1911,13 @@ function onResize(evt) {
     var width = editVisible ? 900 : 1300;
     currentScale = doc.outputBlock.offsetWidth / width;
     if (editVisible) {
+        $(doc.editor).css('height', window.innerHeight - 140);
         $(doc.outputBlock).css('height', doc.editor.offsetHeight);
     } else {
-        $(doc.outputBlock).css('height', (currentScale * 700) + 'px');
+        $(doc.outputBlock).css('height', (currentScale * 700 + 50) + 'px');
     }
     setCrossTransform(doc.output, 'transform');
+    positionNav();
 }
 
 function setCrossTransform(elem, type) {
