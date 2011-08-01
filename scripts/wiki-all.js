@@ -1805,56 +1805,19 @@ var lastText = "";
 var syncTime = 5;
 var editVisible = false;
 var editorInitialized = false;
+
+var renderedText = "";
 var editTimer;
 var EDIT_BUFFER = 1000;   // ms
 
-var currentScale;
-var currentScroll = 0;
+var HEIGHT = 700;
 var H_TO_W_EDIT = .77;
 var H_TO_W_NOT_EDIT = .50;
 var index = false;
-
-var stockCode = {
-    title: '\n<article>\n  <h1>Title Goes Here Up<br/>To Two Lines</h1>' +
-        '\n  <p>Sergey Brin<br/>May 10, 2011</p>\n</article>\n',
-    basic: '\n<article>\n  <p>\n    This is a slide with just text. This is a slide with just text.  This is a slide with just text.  This is a slide with just text.  This is a slide with just text. This is a slide with just text.\n  </p>\n  <p>There is more text just underneath.</p>\n</article>\n',
-    code: '',
-    codePretty: '<article>\n  <h3>This slide has some code </h3>' +
-        '\n  <section><pre>' +
-        '\n    &lt;script type="text/javascript"&gt;' +
-        '\n    // Say hello world until the user starts questioning' +
-        '\n    // the meaningfulness of their existence.' +
-        '\n    function helloWorld(world) {' +
-        '\n    for (var i = 42; --i &gt;= 0;) {' +
-        '\n    alert("Hello " + String(world));' +
-        '\n    }' +
-        '\n    }' +
-        '\n    &lt;/script&gt;' +
-        '\n    &lt;style&gt;' +
-        '\n    p { color: pink }' +
-        '\n    b { color: blue }' +
-        '\n    u { color: "umber" }' +
-        '\n  &lt;/style&gt;' +
-        '\n  </pre></section>' +
-        '\n  </article>',
-    basicBullet: '',
-    builds: '',
-    buildP: '',
-    smaller: '',
-    table: '',
-    styles: '',
-    segue: '',
-    image: '',
-    imageCenter: '',
-    imageFill: '',
-    quote: '',
-    embed: '',
-    embedFull: ''
-};
-
 var wrap = function (articles) {
     return "<section class='slides'>" + articles + "</section>";
 }
+
 
 function getDocid() {
     return handleLocationHash().doc;
@@ -1911,7 +1874,8 @@ function onEditChange() {
         clearTimeout(editTimer);
     }
     var newText = doc.editor.value;
-    if (newText == lastText) {
+    if (newText == renderedText) {
+        lastText = newText;
         return;
     }
     client.setDirty();
@@ -1923,6 +1887,7 @@ function render() {
     if (editTimer) {
         clearTimeout(editTimer);
     }
+    renderedText = lastText;
     doc.output.innerHTML = wrap(lastText);
     refresh();
     onResize();
@@ -1943,17 +1908,12 @@ function toggleEditor(evt) {
         }
         onResize();
     } else {
+        doc.output.style['-webkit-transform'] = 'translate(0, 0)';
         render();
         $(doc.page).removeClass('edit');
-        currentScroll = 0;
         onResize();
     }
     $(doc.edit).val(editVisible ? 'hide' : 'edit');
-}
-
-function insertStockCode() {
-    $(doc.editor).val($(doc.editor).val() + stockCode[$(doc.select).val()]);
-    $(doc.editor).autoResize({limit: 10000});
 }
 
 function onReady() {
@@ -1965,7 +1925,6 @@ function onReady() {
     client.addAppBar();
 
     $(doc.edit).click(toggleEditor);
-    $(doc.insert).click(insertStockCode);
     $(window).bind('scroll', onScroll);
 
     $.ajax({
@@ -1976,7 +1935,7 @@ function onReady() {
         success: function(slides) {
             doc.output.innerHTML = wrap(slides);
             doc.editor.value = slides;
-            lastText = slides;
+            renderedText = slides;
             var el = document.createElement('script');
             el.type = 'text/javascript';
             el.src = 'scripts/slides.js';
@@ -1992,29 +1951,23 @@ function onReady() {
 
 function onScroll() {
     if (editVisible) {
-        currentScroll = window.scrollY;
-        setCrossTransform(doc.output, 'transform');
+        doc.output.style['-webkit-transform'] = 'translate(0, ' + window.scrollY + 'px)';
     }
 }
 
 function onResize(evt) {
-    var width = editVisible ? 900 : 1300;
-    currentScale = doc.outputBlock.offsetWidth / width;
+    var height;
     if (editVisible) {
-        $(doc.outputBlock).css('height', doc.editor.offsetHeight);
+        height = parseFloat($('#outputBlock').css('width')) * H_TO_W_EDIT;
+        $(doc.output).children().css('-webkit-transform', 'scale(' + height / HEIGHT + ')');
+        $(doc.output).css('height', height);
+        $(doc.outputBlock).css('height', doc.editor.style.height);
     } else {
-        $(doc.outputBlock).css('height', (currentScale * 700) + 'px');
+        height = parseFloat($('#outputBlock').css('width')) * H_TO_W_NOT_EDIT;
+        $(doc.output).children().css('-webkit-transform', 'scale(' + height / HEIGHT + ')');
+        $(doc.output).css('height', height);
+        $(doc.outputBlock).css('height', '100%');
     }
-    setCrossTransform(doc.output, 'transform');
-}
-
-function setCrossTransform(elem, type) {
-    var val = 'translate(0, ' + currentScroll + 'px) scale(' + currentScale + ')';
-    $(elem).css('-webkit-' + type, val);
-    $(elem).css('-moz-' + type, val);
-    $(elem).css('-o-' + type, val);
-    $(elem).css('-ms-' + type, val);
-    $(elem).css(type, val);
 }
 
 function updateMeta(json) {

@@ -21,20 +21,56 @@ var lastText = "";
 var syncTime = 5;
 var editVisible = false;
 var editorInitialized = false;
-
 var editTimer;
 var EDIT_BUFFER = 1000;   // ms
-
 
 var currentScale;
 var currentScroll = 0;
 var H_TO_W_EDIT = .77;
 var H_TO_W_NOT_EDIT = .50;
 var index = false;
+
+var stockCode = {
+    title: '\n<article>\n  <h1>Title Goes Here Up<br/>To Two Lines</h1>' +
+        '\n  <p>Sergey Brin<br/>May 10, 2011</p>\n</article>\n',
+    basic: '\n<article>\n  <p>\n    This is a slide with just text. This is a slide with just text.  This is a slide with just text.  This is a slide with just text.  This is a slide with just text. This is a slide with just text.\n  </p>\n  <p>There is more text just underneath.</p>\n</article>\n',
+    code: '',
+    codePretty: '<article>\n  <h3>This slide has some code </h3>' +
+        '\n  <section><pre>' +
+        '\n    &lt;script type="text/javascript"&gt;' +
+        '\n    // Say hello world until the user starts questioning' +
+        '\n    // the meaningfulness of their existence.' +
+        '\n    function helloWorld(world) {' +
+        '\n    for (var i = 42; --i &gt;= 0;) {' +
+        '\n    alert("Hello " + String(world));' +
+        '\n    }' +
+        '\n    }' +
+        '\n    &lt;/script&gt;' +
+        '\n    &lt;style&gt;' +
+        '\n    p { color: pink }' +
+        '\n    b { color: blue }' +
+        '\n    u { color: "umber" }' +
+        '\n  &lt;/style&gt;' +
+        '\n  </pre></section>' +
+        '\n  </article>',
+    basicBullet: '',
+    builds: '',
+    buildP: '',
+    smaller: '',
+    table: '',
+    styles: '',
+    segue: '',
+    image: '',
+    imageCenter: '',
+    imageFill: '',
+    quote: '',
+    embed: '',
+    embedFull: ''
+};
+
 var wrap = function (articles) {
     return "<section class='slides'>" + articles + "</section>";
 }
-
 
 function getDocid() {
     return handleLocationHash().doc;
@@ -131,6 +167,11 @@ function toggleEditor(evt) {
     $(doc.edit).val(editVisible ? 'hide' : 'edit');
 }
 
+function insertStockCode() {
+    $(doc.editor).val($(doc.editor).val() + stockCode[$(doc.select).val()]);
+    $(doc.editor).autoResize({limit: 10000});
+}
+
 function onReady() {
     handleAppCache();
     doc = dom.bindIDs();
@@ -140,6 +181,7 @@ function onReady() {
     client.addAppBar();
 
     $(doc.edit).click(toggleEditor);
+    $(doc.insert).click(insertStockCode);
     $(window).bind('scroll', onScroll);
 
     $.ajax({

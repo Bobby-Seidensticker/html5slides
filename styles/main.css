@@ -34,6 +34,11 @@ span.menu-bar {
     text-align: right;
 }
 
+#page:not(.edit) #select { display: none; }
+#page.edit #select { display: visible; }
+#page:not(.edit) #insert { display: none; }
+#page.edit #insert { display: visible; }
+
 #inputBlock { width: 48%; float: right; }
 #page #outputBlock { overflow: hidden;}
 #page.edit #outputBlock { width: 48%; float: left; margin: 0; }
