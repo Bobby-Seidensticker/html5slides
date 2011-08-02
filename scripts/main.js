@@ -117,9 +117,22 @@ function tooFarInFuture() {
     if (curSlide < slideEls.length) {
         return;
     }
-    var dist = curSlide + 1 - slideEls.length;
-    for (var i = 0; i < dist; i++) {
-        prevSlide();
+    adjustSlidePos(slideEls.length - 1);
+}
+
+function adjustSlidePos(newIndex) {
+    var diff = newIndex - curSlide;
+    if (diff === 0) {
+        return;
+    }
+    if (diff > 0) {
+        for (var i = 0; i < diff; i++) {
+            nextSlide();
+        }
+    } else {
+        for (var i = 0; i < -diff; i++) {
+            prevSlide();
+        }
     }
 }
 
@@ -144,14 +157,19 @@ function toggleEditor(evt) {
 }
 
 function insertStockCode() {
-    var text = stockCode[$(doc.select).val()];
+    var text, val, tail, str, loc;
+    text = trimCode(stockCode[$(doc.select).val()]);
     if (!text) {
         return;
     }
-    var val = $(doc.editor).val();
-    var str = val.slice(0, doc.editor.selectionStart) +
-        trimCode(text) +
-        val.slice(doc.editor.selectionEnd);
+    val = $(doc.editor).val();
+    tail = val.slice(doc.editor.selectionEnd);
+    if (tail.indexOf('<article') == -1) {
+        $(doc.editor).val(val + '\n' + text);
+        return;
+    }
+    loc = doc.editor.selectionEnd + tail.indexOf('<article');
+    str = val.slice(0, loc) + text + '\n' + val.slice(loc);
     $(doc.editor).val(str);
     onEditChange();
 }
@@ -181,6 +199,8 @@ function onReady() {
     $(doc.edit).click(toggleEditor);
     $(doc.insert).click(insertStockCode);
     $(window).bind('scroll', onScroll);
+    $(doc.editor).keydown(tabToSpace);
+
     var scripts = $('script[type=slide-template]');
     var s;
     for (var i = 0; i < scripts.length; i++) {
@@ -209,6 +229,15 @@ function onReady() {
         }
     });
     $(window).bind('resize', onResize);
+}
+
+function tabToSpace(event) {
+    if (event.keyCode == 9) { //tab
+        event.preventDefault();
+        var val = $(this).val();
+        var str = val.split(0, this.selectionStart) + '  ' + val.split(this.selectionStart);
+        this.selectionStart += 2;
+    }
 }
 
 function onScroll() {
