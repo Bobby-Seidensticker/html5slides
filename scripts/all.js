@@ -1884,6 +1884,8 @@ function onReady() {
     $(doc.edit).click(toggleEditor);
     $(doc.insert).click(insertStockCode);
     $(window).bind('scroll', onScroll);
+    $(doc.editor).keydown(tabToSpace);
+
     var scripts = $('script[type=slide-template]');
     var s;
     for (var i = 0; i < scripts.length; i++) {
@@ -1912,6 +1914,18 @@ function onReady() {
         }
     });
     $(window).bind('resize', onResize);
+}
+
+function tabToSpace(event) {
+    if (event.keyCode == 9) { //tab
+        var selectionStart = this.selectionStart;
+        event.preventDefault();
+        var val = $(this).val();
+        var str = val.slice(0, selectionStart) + '  ' + val.slice(selectionStart);
+        $(this).val(str);
+        this.selectionStart = selectionStart + 2;
+        this.selectionEnd = this.selectionStart;
+    }
 }
 
 function onScroll() {

@@ -233,10 +233,13 @@ function onReady() {
 
 function tabToSpace(event) {
     if (event.keyCode == 9) { //tab
+        var selectionStart = this.selectionStart;
         event.preventDefault();
         var val = $(this).val();
-        var str = val.split(0, this.selectionStart) + '  ' + val.split(this.selectionStart);
-        this.selectionStart += 2;
+        var str = val.slice(0, selectionStart) + '  ' + val.slice(selectionStart);
+        $(this).val(str);
+        this.selectionStart = selectionStart + 2;
+        this.selectionEnd = this.selectionStart;
     }
 }
 
