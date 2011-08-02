@@ -26,33 +26,21 @@ var EDIT_BUFFER = 1000;   // ms
 
 var currentScale;
 var currentScroll = 0;
-var H_TO_W_EDIT = .77;
-var H_TO_W_NOT_EDIT = .50;
 var index = false;
+var BASE_HEIGHT = 130;
+var BUTTON_HEIGHT = 40;
+var IDEAL_WIDTH = 1300;
+var COMPRESSED_WIDTH = 900;
+var HEIGHT = 700;
+var OUTPUT_WIDTH = .9;
+var OUTPUT_WIDTH_EDIT = .4317;
 
-var stockCode = {
-    title: '\n<article>\n  <h1>Title Goes Here Up<br/>To Two Lines</h1>' +
-        '\n  <p>Sergey Brin<br/>May 10, 2011</p>\n</article>\n',
-    basic: '\n<article>\n  <p>\n    This is a slide with just text. This is a slide with just text.  This is a slide with just text.  This is a slide with just text.  This is a slide with just text. This is a slide with just text.\n  </p>\n  <p>There is more text just underneath.</p>\n</article>\n',
+
+var stockCode = {};/* = {
+    title: '',
+    basic: '',
     code: '',
-    codePretty: '<article>\n  <h3>This slide has some code </h3>' +
-        '\n  <section><pre>' +
-        '\n    &lt;script type="text/javascript"&gt;' +
-        '\n    // Say hello world until the user starts questioning' +
-        '\n    // the meaningfulness of their existence.' +
-        '\n    function helloWorld(world) {' +
-        '\n    for (var i = 42; --i &gt;= 0;) {' +
-        '\n    alert("Hello " + String(world));' +
-        '\n    }' +
-        '\n    }' +
-        '\n    &lt;/script&gt;' +
-        '\n    &lt;style&gt;' +
-        '\n    p { color: pink }' +
-        '\n    b { color: blue }' +
-        '\n    u { color: "umber" }' +
-        '\n  &lt;/style&gt;' +
-        '\n  </pre></section>' +
-        '\n  </article>',
+    codePretty: '',
     basicBullet: '',
     builds: '',
     buildP: '',
@@ -66,11 +54,7 @@ var stockCode = {
     quote: '',
     embed: '',
     embedFull: ''
-};
-
-var wrap = function (articles) {
-    return "<section class='slides'>" + articles + "</section>";
-}
+};*/
 
 function getDocid() {
     return handleLocationHash().doc;
@@ -139,8 +123,7 @@ function render() {
     if (editTimer) {
         clearTimeout(editTimer);
     }
-    $(doc.output).children('section').remove();
-    $(doc.output).append(wrap(lastText));
+    $(doc.output).html("<section class='slides'>" + lastText + "</section>");
     refresh();
     onResize();
 }
@@ -156,18 +139,35 @@ function toggleEditor(evt) {
             editorInitialized = true;
             $(doc.editor).bind('keyup', onEditChange);
         }
-        onResize();
     } else {
         render();
         $(doc.page).removeClass('edit');
         currentScroll = 0;
-        onResize();
     }
+    onResize();
     $(doc.edit).val(editVisible ? 'hide' : 'edit');
 }
 
 function insertStockCode() {
-    $(doc.editor).val($(doc.editor).val() + stockCode[$(doc.select).val()]);
+    var text = stockCode[$(doc.select).val()];
+    if (!text) {
+        return;
+    }
+    $(doc.editor).val($(doc.editor).val() + trimCode(text));
+}
+
+function trimCode(s) {
+    s = s.replace(/^\n+|\s+$/g, '');
+    var match = /^\s+/.exec(s);
+    if (match) {
+        var pre = new RegExp('^\\s{' + match[0].length + '}');
+        var lines = s.split('\n');
+        for (var i = 0; i < lines.length; i++) {
+            lines[i] = lines[i].replace(pre, '');
+        }
+        s = lines.join('\n');
+    }
+    return s + '\n';
 }
 
 function onReady() {
@@ -181,6 +181,12 @@ function onReady() {
     $(doc.edit).click(toggleEditor);
     $(doc.insert).click(insertStockCode);
     $(window).bind('scroll', onScroll);
+    var scripts = $('script[type=slide-template]');
+    var s;
+    for (var i = 0; i < scripts.length; i++) {
+        s = scripts[i];
+        stockCode[s.title] = $(s).text();
+    }
 
     $.ajax({
         url: 'slides.html',
@@ -218,25 +224,45 @@ function positionNav() {
         var topOfNav = doc.output.offsetHeight * currentScale + window.scrollY;
         $(doc.nav).css('top', topOfNav + 'px');
     } else {
-        $(doc.nav).css('top', (doc.outputBlock.offsetHeight - 45) + 'px');        
+        $(doc.nav).css('top', (doc.outputBlock.offsetHeight - 35) + 'px');
     }
 }
 
 function onResize(evt) {
-    var width = editVisible ? 900 : 1300;
-    currentScale = doc.outputBlock.offsetWidth / width;
+    var width = editVisible ? COMPRESSED_WIDTH : IDEAL_WIDTH;
     if (editVisible) {
-        $(doc.editor).css('height', window.innerHeight - 140);
-        $(doc.outputBlock).css('height', doc.editor.offsetHeight);
+        var h = window.innerHeight - BASE_HEIGHT - BUTTON_HEIGHT;
+        var w = window.innerWidth * OUTPUT_WIDTH_EDIT; // .4317
+        if (h / HEIGHT > w / COMPRESSED_WIDTH) {
+            currentScale = doc.outputBlock.offsetWidth / width;
+            if (currentShift > 0) {
+                currentShift = 0;
+            }
+        } else {
+            currentScale = h / HEIGHT;
+            currentShift = (w - COMPRESSED_WIDTH * currentScale) / 2;
+        }
+        $(doc.editor).css('height', window.innerHeight - BASE_HEIGHT);
+        $(doc.outputBlock).css('height', window.innerHeight - BASE_HEIGHT);
     } else {
-        $(doc.outputBlock).css('height', (currentScale * 700 + 50) + 'px');
+        var h = window.innerHeight - BASE_HEIGHT - BUTTON_HEIGHT;
+
+        var w = window.innerWidth * OUTPUT_WIDTH; // .9
+        if (h / HEIGHT > w / IDEAL_WIDTH) {
+            currentScale = w / IDEAL_WIDTH;
+            currentShift = 0;
+        } else {
+            currentScale = h / HEIGHT;
+            currentShift = (w - IDEAL_WIDTH * currentScale) / 2;
+        }
+        $(doc.outputBlock).css('height', (currentScale * HEIGHT + BUTTON_HEIGHT) + 'px');
     }
     setCrossTransform(doc.output, 'transform');
     positionNav();
 }
 
 function setCrossTransform(elem, type) {
-    var val = 'translate(0, ' + currentScroll + 'px) scale(' + currentScale + ')';
+    var val = 'translate(' + currentShift + 'px, ' + currentScroll + 'px) scale(' + currentScale + ')';
     $(elem).css('-webkit-' + type, val);
     $(elem).css('-moz-' + type, val);
     $(elem).css('-o-' + type, val);

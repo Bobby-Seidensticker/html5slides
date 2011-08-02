@@ -6,7 +6,7 @@
 
 <!--    Google HTML5 slide template
 
-        Authors: Luke Mahé (code)
+        Authors: Luke MahÃ© (code)
         Marcin Wichary (code and design)
 
         Dominic Mazzoni (browser compatibility)
@@ -43,14 +43,14 @@
         <select id=select>
           <option value=title>Large Title</option>
           <option value=basic>Basic Bullets and Paragraphs</option>
-          <option value=code>Inline Black Code</option>
+          <option value=code>Inline Code Snippet</option>
           <option value=codePretty>Block Pretty Code</option>
-          <option value=basicBullet>Bulleted List</option>
           <option value=builds>Builds with Action</option>
-          <option value=buildP>Paragraphs that Build</option>
-          <option value=smaller>Small font</option>
+
+
           <option value=table>With Table</option>
           <option value=styles>With Styles</option>
+          <option value=smaller>Small font</option>
           <option value=segue>Segue Slide</option>
           <option value=image>Image</option>
           <option value=imageCenter>Image Center</option>
@@ -71,9 +71,9 @@
     <div id="outputBlock">
       <div id="output"></div>
       <div id="nav">
-        <input type="button" id="prev" value="prev"/>
+        <input type="button" id="prev" value="Back"/>
         <div id=pos></div>
-        <input type="button" id="next" value="next"/>
+        <input type="button" id="next" value="Next"/>
       </div>
     </div>
 
@@ -85,6 +85,210 @@
     </div>
 
   </div>
+
+  <script type="slide-template" title="title">
+    <article>
+      <h1>
+        Title Goes Here Up<br/>
+        To Two Lines
+      </h1>
+      <p>
+        Sergey Brin<br/>
+        May 10, 2011
+      </p>
+    </article>
+  </script>
+
+  <script type="slide-template" title="basic">
+    <article>
+      <h3>Have some p's and ul's!</h3>
+      <p>
+        This is a paragraph with a bunch of text in it.  Here's even more text!
+      </p>
+      <ul>
+        <li>1 Slacking Employee</li>
+        <li>2 Sticks</li>
+        <li>3 Cobblestone</li>
+      </ul>
+      <p>
+        Another paragraph!
+      </p>
+    </article>
+  </script>
+
+  <script type="slide-template" title="codePretty">
+    <article>
+      <h3>This slide has some code </h3>
+      <section>
+        <pre>
+          &lt;script type="text/javascript"&gt;
+            // Say hello world until the user starts questioning
+            // the meaningfulness of their existence.
+            function helloWorld(world) {
+              for (var i = 42; --i &gt;= 0;) {
+                alert("Hello " + String(world));
+              }
+            }
+          &lt;/script&gt;
+          &lt;style&gt;
+            p { color: pink }
+            b { color: blue }
+            u { color: "umber" }
+          &lt;/style&gt;
+        </pre>
+      </section>
+    </article>
+  </script>
+
+  <script type="slide-template" title="code">
+    <article>
+      <h3>
+        Inline Code
+      </h3>
+      <p>
+        Take your paragraph and add some <code>code sample: 5px;</code>
+      </p>
+    </article>
+  </script>
+
+  <script type="slide-template" title="builds">
+    <article>
+      <h3>
+        Slide with bullet points that builds
+      </h3>
+      <ul class="build">
+        <li>
+          This is an example of a list
+        <li>
+          The list items fade in
+        <li>
+          Last one!
+      </ul>
+      <div class="build">
+        <p>Any element with child nodes can build.</p>
+        <p>It doesn't have to be a list.</p>
+      </div>
+    </article>
+  </script>
+
+  <script type="slide-template" title="table">
+    <article>
+      <h3>
+        Slide with a table
+      </h3>
+      <table>
+        <tr>
+          <th>
+            Name
+          <th>
+            Occupation
+        <tr>
+          <td>
+           Luke Mahï¿½
+          <td>
+            V.P. of Keepin' It Real
+        <tr>
+          <td>
+             Marcin Wichary
+          <td>
+             The Michael Bay of Doodles
+      </table>
+    </article>
+  </script>
+
+  <script type="slide-template" title="styles">
+    <article>
+      <h3>
+        Styles
+      </h3>
+      <ul>
+        <li>
+          <span class='red'>class="red"</span>
+        <li>
+          <span class='blue'>class="blue"</span>
+        <li>
+          <span class='green'>class="green"</span>
+        <li>
+          <span class='yellow'>class="yellow"</span>
+        <li>
+          <span class='black'>class="black"</span>
+        <li>
+          <span class='white'>class="white"</span>
+        <li>
+          <b>bold</b> and <i>italic</i>
+      </ul>
+    </article>
+  </script>
+
+  <script type="slide-template" title="smaller">
+    <article class='smaller'>
+      <h3>
+        Everything is small!
+      </h3>
+      <ul>
+        <li>
+          Bullets
+      <p>Paragraphs!</p>
+      <table>
+        <tr>
+          <th>
+            Even
+          <th>
+            Tables
+        <tr>
+          <td>
+           Luke Mahï¿½
+          <td>
+            V.P. of Keepin' It Real
+        <tr>
+          <td>
+             Marcin Wichary
+          <td>
+             The Michael Bay of Doodles
+      </table>
+      </ul>
+    </article>
+  </script>
+
+  <script type="slide-template" title="seque">
+    <article>
+      <h2>
+        Segue slide
+      </h2>
+    </article>
+  </script>
+
+  <script type="slide-template" title="seque">
+  </script>
+
+  <script type="slide-template" title="seque">
+  </script>
+
+  <script type="slide-template" title="seque">
+  </script>
+
+  <script type="slide-template" title="seque">
+  </script>
+
+  <script type="slide-template" title="seque">
+  </script>
+
+  <script type="slide-template" title="seque">
+  </script>
+
+  <script type="slide-template" title="seque">
+  </script>
+
+
+<!--
+
+  <option value=image>Image</option>
+  <option value=imageCenter>Image Center</option>
+  <option value=imageFill>Image Fill</option>
+  <option value=quote>Quote</option>
+  <option value=embed>Embeded Webpage</option>
+  <option value=embedFull>Embeded Webpage Full</option>
+-->
 
   <script type="text/javascript">
   var _gaq = _gaq || [];
