@@ -35,26 +35,8 @@ var HEIGHT = 700;
 var OUTPUT_WIDTH = .9;
 var OUTPUT_WIDTH_EDIT = .4317;
 
+var stockCode = {};
 
-var stockCode = {};/* = {
-    title: '',
-    basic: '',
-    code: '',
-    codePretty: '',
-    basicBullet: '',
-    builds: '',
-    buildP: '',
-    smaller: '',
-    table: '',
-    styles: '',
-    segue: '',
-    image: '',
-    imageCenter: '',
-    imageFill: '',
-    quote: '',
-    embed: '',
-    embedFull: ''
-};*/
 
 function getDocid() {
     return handleLocationHash().doc;
@@ -125,7 +107,20 @@ function render() {
     }
     $(doc.output).html("<section class='slides'>" + lastText + "</section>");
     refresh();
+    tooFarInFuture();
     onResize();
+}
+
+// if deleting text makes currentSlide > # slides then,
+// rewind so currentSlide is new last slide
+function tooFarInFuture() {
+    if (curSlide < slideEls.length) {
+        return;
+    }
+    var dist = curSlide + 1 - slideEls.length;
+    for (var i = 0; i < dist; i++) {
+        prevSlide();
+    }
 }
 
 function toggleEditor(evt) {
@@ -153,7 +148,12 @@ function insertStockCode() {
     if (!text) {
         return;
     }
-    $(doc.editor).val($(doc.editor).val() + trimCode(text));
+    var val = $(doc.editor).val();
+    var str = val.slice(0, doc.editor.selectionStart) +
+        trimCode(text) +
+        val.slice(doc.editor.selectionEnd);
+    $(doc.editor).val(str);
+    onEditChange();
 }
 
 function trimCode(s) {

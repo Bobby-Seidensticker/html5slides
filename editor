@@ -46,8 +46,6 @@
           <option value=code>Inline Code Snippet</option>
           <option value=codePretty>Block Pretty Code</option>
           <option value=builds>Builds with Action</option>
-
-
           <option value=table>With Table</option>
           <option value=styles>With Styles</option>
           <option value=smaller>Small font</option>
@@ -237,20 +235,25 @@
             Tables
         <tr>
           <td>
-           Luke Mah�
+            Are
           <td>
-            V.P. of Keepin' It Real
+            Acceptable
         <tr>
           <td>
-             Marcin Wichary
+            This
           <td>
-             The Michael Bay of Doodles
-      </table>
+            Text
+        <tr>
+          <td>
+            Is
+          <td>
+            Unintuitive
+          </table>
       </ul>
     </article>
   </script>
 
-  <script type="slide-template" title="seque">
+  <script type="slide-template" title="segue">
     <article>
       <h2>
         Segue slide
@@ -258,37 +261,76 @@
     </article>
   </script>
 
-  <script type="slide-template" title="seque">
+  <script type="slide-template" title="imageFill">
+    <article class='fill'>
+      <h3>
+        Image filling the slide (with optional header)
+      </h3>
+      <p>
+        <img src='http://i55.tinypic.com/14vpr0j.jpg'>
+      </p>
+      <div class='source white'>
+        Source: Eric Schmidt
+      </div>
+    </article>
   </script>
 
-  <script type="slide-template" title="seque">
+  <script type="slide-template" title="image">
+    <article>
+      <h3>
+        Slide with an image
+      </h3>
+      <p>
+        <img style='height: 500px' src='http://i53.tinypic.com/zk65jq.png'>
+      </p>
+      <div class='source'>
+        Source: Sergey Brin
+      </div>
+    </article>
   </script>
 
-  <script type="slide-template" title="seque">
+  <script type="slide-template" title="imageCenter">
+    <article>
+      <h3>
+        Slide with an image (centered)
+      </h3>
+      <p>
+        <img class='centered' style='height: 500px' src='http://i53.tinypic.com/zk65jq.png'>
+      </p>
+      <div class='source'>
+        Source: Larry Page
+      </div>
+    </article>
   </script>
 
-  <script type="slide-template" title="seque">
+  <script type="slide-template" title="quote">
+    <article>
+      <q>
+        The best way to predict the future is to invent it.
+      </q>
+      <div class='author'>
+        Alan Kay
+      </div>
+    </article>
   </script>
 
-  <script type="slide-template" title="seque">
+  <script type="slide-template" title="embed">
+    <article class='nobackground'>
+      <h3>
+        A slide with an embed + title
+      </h3>
+      <iframe src='http://www.pageforest.com'></iframe>
+    </article>
   </script>
 
-  <script type="slide-template" title="seque">
+  <script type="slide-template" title="embedFull">
+    <article class='fill'>
+      <h3>
+        Full-slide embed with (optional) slide title on top
+      </h3>
+      <iframe src='http://www.pageforest.com'></iframe>
+    </article>
   </script>
-
-  <script type="slide-template" title="seque">
-  </script>
-
-
-<!--
-
-  <option value=image>Image</option>
-  <option value=imageCenter>Image Center</option>
-  <option value=imageFill>Image Fill</option>
-  <option value=quote>Quote</option>
-  <option value=embed>Embeded Webpage</option>
-  <option value=embedFull>Embeded Webpage Full</option>
--->
 
   <script type="text/javascript">
   var _gaq = _gaq || [];
