@@ -27,6 +27,9 @@ var EDIT_BUFFER = 1000;   // ms
 var currentScale;
 var currentScroll = 0;
 var index = false;
+var slideBoundries = [];
+
+
 var BASE_HEIGHT = 130;
 var BUTTON_HEIGHT = 40;
 var IDEAL_WIDTH = 1300;
@@ -88,7 +91,18 @@ function handleLocationHash(obj) {
     };
 }
 
-function onEditChange() {
+function onEditChange(event) {
+    if (event) {
+        switch (event.keyCode) {
+        case 39: // right arrow
+        case 37: // left arrow
+        case 40: // down arrow
+        case 38: // up arrow
+        case 34: // PgDn
+        case 33: // PgUp
+            return;
+        }
+    }
     if (editTimer) {
         clearTimeout(editTimer);
     }
@@ -198,8 +212,9 @@ function onReady() {
 
     $(doc.edit).click(toggleEditor);
     $(doc.insert).click(insertStockCode);
-    $(window).bind('scroll', onScroll);
+//    $(window).bind('scroll', onScroll);
     $(doc.editor).keydown(tabToSpace);
+
 
     var scripts = $('script[type=slide-template]');
     var s;
@@ -207,6 +222,8 @@ function onReady() {
         s = scripts[i];
         stockCode[s.title] = $(s).text();
     }
+
+    $(doc.editor).bind('keydown click focus', findSlideBoundries);
 
     $.ajax({
         url: 'slides.html',
@@ -231,6 +248,25 @@ function onReady() {
     $(window).bind('resize', onResize);
 }
 
+function findSlideBoundries() {
+    var nextLoc, s, distFromZero = 0;
+    var val = $(doc.editor).val();
+    var hasBeenSet = false;
+    slideBoundries = [0];
+    s = slideBoundries;
+    nextLoc = val.indexOf('</article>') + 10;
+    while (nextLoc > 9) {
+        distFromZero += nextLoc
+        s[s.length] = distFromZero;
+        val = val.slice(nextLoc);
+        nextLoc = val.indexOf('</article>') + 10;
+        if (!hasBeenSet && distFromZero > doc.editor.selectionEnd) {
+            adjustSlidePos(slideBoundries.length - 2);
+            hasBeenSet = true;
+        }
+    }
+}
+
 function tabToSpace(event) {
     if (event.keyCode == 9) { //tab
         var selectionStart = this.selectionStart;
@@ -242,14 +278,14 @@ function tabToSpace(event) {
         this.selectionEnd = this.selectionStart;
     }
 }
-
+/*
 function onScroll() {
     if (editVisible) {
         currentScroll = window.scrollY;
         setCrossTransform(doc.output, 'transform');
         setTimeout(positionNav, 10);
     }
-}
+}*/
 
 function positionNav() {
     if (editVisible) {
