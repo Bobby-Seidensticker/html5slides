@@ -13,11 +13,15 @@ exports.extend({
     'getDocid': getDocid,
     'setDocid': setDocid
 });
+//testing vars
+var startTime = Math.floor(new Date().getTime() / 1000);
+
 
 var client;
 var doc;                            // Bound elements here
 var blob;
-var lastText = "";
+var latestText = '';
+var renderedText = '';
 var syncTime = 5;
 var editVisible = false;
 var editorInitialized = false;
@@ -28,6 +32,7 @@ var currentScale;
 var currentScroll = 0;
 var index = false;
 var slideBoundries = [];
+var curBoundriesText = '';
 
 
 var BASE_HEIGHT = 130;
@@ -103,23 +108,24 @@ function onEditChange(event) {
             return;
         }
     }
-    if (editTimer) {
-        clearTimeout(editTimer);
-    }
-    var newText = doc.editor.value;
-    if (newText == lastText) {
-        return;
+    latestText = doc.editor.value;
+    if (editTimer == undefined) {
+        editTimer = setTimeout(render, EDIT_BUFFER);
     }
     client.setDirty();
-    lastText = newText;
-    editTimer = setTimeout(render, EDIT_BUFFER);
 }
 
 function render() {
-    if (editTimer) {
-        clearTimeout(editTimer);
+    console.log('render, time: ' + (Math.floor(new Date().getTime() / 1000) - startTime));
+    editTimer = undefined;
+    if (renderedText == latestText) {
+        return;
     }
-    $(doc.output).html("<section class='slides'>" + lastText + "</section>");
+    editTimer = setTimeout(render, EDIT_BUFFER);
+
+    $(doc.output).html("<section class='slides'>" + latestText + "</section>");
+    renderedText = latestText;
+
     refresh();
     tooFarInFuture();
     onResize();
@@ -131,17 +137,27 @@ function tooFarInFuture() {
     if (curSlide < slideEls.length) {
         return;
     }
+    if (slideEls.length == 0) {
+        adjustSlidePos(0);
+    }
     adjustSlidePos(slideEls.length - 1);
 }
 
 function adjustSlidePos(newIndex) {
     var diff = newIndex - curSlide;
+    var temp;
     if (diff === 0) {
         return;
     }
     if (diff > 0) {
         for (var i = 0; i < diff; i++) {
+            if (curSlide < slideEls.length) {
+                temp = curSlide;
+            }
             nextSlide();
+            while (temp && curSlide == temp) {  // for slides that build
+                nextSlide();
+            }
         }
     } else {
         for (var i = 0; i < -diff; i++) {
@@ -179,11 +195,11 @@ function insertStockCode() {
     val = $(doc.editor).val();
     tail = val.slice(doc.editor.selectionEnd);
     if (tail.indexOf('<article') == -1) {
-        $(doc.editor).val(val + '\n' + text);
-        return;
+        str = val + '\n' + text;
+    } else {
+        loc = doc.editor.selectionEnd + tail.indexOf('<article');
+        str = val.slice(0, loc) + text + '\n' + val.slice(loc);
     }
-    loc = doc.editor.selectionEnd + tail.indexOf('<article');
-    str = val.slice(0, loc) + text + '\n' + val.slice(loc);
     $(doc.editor).val(str);
     onEditChange();
 }
@@ -223,7 +239,7 @@ function onReady() {
         stockCode[s.title] = $(s).text();
     }
 
-    $(doc.editor).bind('keydown click focus', findSlideBoundries);
+    $(doc.editor).bind('keydown click focus', setSlidePosFromCursor);
 
     $.ajax({
         url: 'slides.html',
@@ -231,7 +247,7 @@ function onReady() {
             console.log('ajax load error');
         },
         success: function(slides) {
-            lastText = slides;
+            latestText = slides;
             doc.editor.value = slides;
             var el = document.createElement('script');
             el.type = 'text/javascript';
@@ -248,10 +264,10 @@ function onReady() {
     $(window).bind('resize', onResize);
 }
 
-function findSlideBoundries() {
-    var nextLoc, s, distFromZero = 0;
+function getSlideBoundries() {
+    var nextLoc, s;
+    var distFromZero = 0;
     var val = $(doc.editor).val();
-    var hasBeenSet = false;
     slideBoundries = [0];
     s = slideBoundries;
     nextLoc = val.indexOf('</article>') + 10;
@@ -260,11 +276,29 @@ function findSlideBoundries() {
         s[s.length] = distFromZero;
         val = val.slice(nextLoc);
         nextLoc = val.indexOf('</article>') + 10;
-        if (!hasBeenSet && distFromZero > doc.editor.selectionEnd) {
-            adjustSlidePos(slideBoundries.length - 2);
-            hasBeenSet = true;
+    }
+    curBoundriesText = latestText;
+}
+
+function setSlidePosFromCursor() {
+    if (latestText != curBoundriesText) {
+        getSlideBoundries();
+    }
+    // if cursor is inside slide currently displayed do nothing
+    if (doc.editor.selectionEnd > slideBoundries[curSlide] &&
+        doc.editor.selectionEnd < slideBoundries[curSlide + 1]) {
+        return;
+    }
+    // find which slide cursor is in
+    for (var i = 1; i < slideBoundries.length; i++) {
+        if (slideBoundries[i] >= doc.editor.selectionEnd) {
+            adjustSlidePos(i - 1);
+            return;
         }
     }
+    // in case cursor is at very end
+    adjustSlidePos(slideEls.length - 1);
+    return;
 }
 
 function tabToSpace(event) {
