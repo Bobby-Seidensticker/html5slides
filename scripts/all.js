@@ -1726,8 +1726,8 @@ var BUTTON_HEIGHT = 40;
 var IDEAL_WIDTH = 1300;
 var COMPRESSED_WIDTH = 900;
 var HEIGHT = 700;
-var OUTPUT_WIDTH = .9;
-var OUTPUT_WIDTH_EDIT = .4317;
+var OUTPUT_WIDTH = 0.9;
+var OUTPUT_WIDTH_EDIT = 0.4317;
 
 var stockCode = {};
 
@@ -1832,24 +1832,23 @@ function tooFarInFuture() {
 
 function adjustSlidePos(newIndex) {
     var diff = newIndex - curSlide;
-    var temp;
+    var i;
+
     if (diff === 0) {
         return;
     }
     if (diff > 0) {
-        for (var i = 0; i < diff; i++) {
-            if (curSlide < slideEls.length - 1) {
-                temp = curSlide;
-            }
+        for (i = 0; i < diff; i++) {
+            var saveSlide = curSlide;
             automatedFlag = true;
-            nextSlide();
-            while (temp && curSlide == temp) {  // for slides that build
+            // Advance past slides that have builds
+            while (curSlide == saveSlide && curSlide < slideEls.length - 1) {
                 automatedFlag = true;
                 nextSlide();
             }
         }
     } else {
-        for (var i = 0; i < -diff; i++) {
+        for (i = 0; i < -diff; i++) {
             automatedFlag = true;
             prevSlide();
         }
@@ -1953,7 +1952,7 @@ function onReady() {
                 $(doc.prev).click(prevSlide);
                 getSlideBoundries();
                 $(doc.output).css('display', 'block');
-            }
+            };
             document.body.appendChild(el);
         }
     });
@@ -1968,7 +1967,7 @@ function getSlideBoundries() {
     s = slideBoundries;
     nextLoc = val.indexOf('</article>') + 10;
     while (nextLoc > 9) {
-        distFromZero += nextLoc
+        distFromZero += nextLoc;
         s[s.length] = distFromZero;
         val = val.slice(nextLoc);
         nextLoc = val.indexOf('</article>') + 10;
@@ -2030,9 +2029,11 @@ function positionNav() {
 
 function onResize(evt) {
     var width = editVisible ? COMPRESSED_WIDTH : IDEAL_WIDTH;
+    var h, w;
+
     if (editVisible) {
-        var h = window.innerHeight - BASE_HEIGHT - BUTTON_HEIGHT;
-        var w = window.innerWidth * OUTPUT_WIDTH_EDIT; // .4317
+        h = window.innerHeight - BASE_HEIGHT - BUTTON_HEIGHT;
+        w = window.innerWidth * OUTPUT_WIDTH_EDIT; // .4317
         if (h / HEIGHT > w / COMPRESSED_WIDTH) {
             currentScale = doc.outputBlock.offsetWidth / width;
             if (currentShift > 0) {
@@ -2045,9 +2046,8 @@ function onResize(evt) {
         $(doc.editor).css('height', window.innerHeight - BASE_HEIGHT);
         $(doc.outputBlock).css('height', window.innerHeight - BASE_HEIGHT);
     } else {
-        var h = window.innerHeight - BASE_HEIGHT - BUTTON_HEIGHT;
-
-        var w = window.innerWidth * OUTPUT_WIDTH; // .9
+        h = window.innerHeight - BASE_HEIGHT - BUTTON_HEIGHT;
+        w = window.innerWidth * OUTPUT_WIDTH; // .9
         if (h / HEIGHT > w / IDEAL_WIDTH) {
             currentScale = w / IDEAL_WIDTH;
             currentShift = 0;
@@ -2063,7 +2063,8 @@ function onResize(evt) {
 }
 
 function setCrossTransform(elem, type) {
-    var val = 'translate(' + currentShift + 'px, ' + currentScroll + 'px) scale(' + currentScale + ')';
+    var val = 'translate(' + currentShift + 'px, ' +
+        currentScroll + 'px) scale(' + currentScale + ')';
     $(elem).css('-webkit-' + type, val);
     $(elem).css('-moz-' + type, val);
     $(elem).css('-o-' + type, val);
@@ -2111,7 +2112,7 @@ function setDoc(json) {
         el.src = 'scripts/slides.js';
         el.onload = function() {
             handleDomLoaded();
-        }
+        };
         document.body.appendChild(el);
         return;
     }
