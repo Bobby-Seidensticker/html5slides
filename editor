@@ -19,6 +19,7 @@
 
 <meta charset='utf-8'>
 
+
 <link rel="icon" type="image/png" href="/images/icon.png" />
 <link rel="apple-touch-icon" href="/images/touch.png" />
 
@@ -40,6 +41,7 @@
     <h1 id="page-heading">
       <span id="title">New Presentation</span>
       <span class="menu-bar">
+        <div id=phantom></div>
         <select id=select>
           <option value=title>Large Title</option>
           <option value=basic>Basic Bullets and Paragraphs</option>
@@ -77,7 +79,8 @@
 
     <div id="footer">
       <hr/>
-      <a target="_blank" href="#">Start a New Slideshow</a> |
+      <a target="_blank" id=fullscreen href="#">This Slideshow Fullscreen</a> |
+      <a target="_blank" href="http://html5slides.googlecode.com/svn/trunk/template/index.html">Google's Original</a> |
       <a target="_blank" href="https://github.com/Bobby-Seidensticker/html5slides">Source Code</a> |
       <a href="http://www.pageforest.com">Pageforest.com</a>
     </div>
@@ -182,7 +185,7 @@
             Occupation
         <tr>
           <td>
-           Luke Mah�
+           Luke Mahe
           <td>
             V.P. of Keepin' It Real
         <tr>

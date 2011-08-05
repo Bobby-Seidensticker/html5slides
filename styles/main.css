@@ -4,6 +4,7 @@ body {
     font-family: Verdana, Arial, Helvetica, sans-serif;
     font-size: 100%;
     background: #ebebeb url("/images/gradient.jpg") repeat-x left top;
+    overflow: hidden;
 }
 
 div { padding:0; margin:0; }
@@ -32,6 +33,16 @@ span.menu-bar {
     color: gray;
     font-size: 0.5em;
     text-align: right;
+}
+span.menu-bar div#phantom {
+  position: absolute;
+  top: 0px;
+  z-index: 10;
+  left: -600px;
+}
+div#phantom pre {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 100%;
 }
 
 #page:not(.edit) #select { display: none; }

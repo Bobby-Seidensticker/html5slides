@@ -1695,6 +1695,7 @@ exports.extend({
     'setDoc': setDoc,
     'onSaveSuccess': onSaveSuccess,
     'handleLocationHash': handleLocationHash,
+    'setCursorPos': setCursorPos,
     'getDocid': getDocid,
     'setDocid': setDocid
 });
@@ -1801,7 +1802,6 @@ function onEditChange(event) {
 }
 
 function render() {
-    console.log('render, time: ' + (Math.floor(new Date().getTime() / 1000) - startTime));
     editTimer = undefined;
     if (renderedText == latestText) {
         return;
@@ -1839,13 +1839,16 @@ function adjustSlidePos(newIndex) {
             if (curSlide < slideEls.length) {
                 temp = curSlide;
             }
+            automatedFlag = true;
             nextSlide();
             while (temp && curSlide == temp) {  // for slides that build
+                automatedFlag = true;
                 nextSlide();
             }
         }
     } else {
         for (var i = 0; i < -diff; i++) {
+            automatedFlag = true;
             prevSlide();
         }
     }
@@ -1915,7 +1918,10 @@ function onReady() {
     $(doc.insert).click(insertStockCode);
 //    $(window).bind('scroll', onScroll);
     $(doc.editor).keydown(tabToSpace);
-
+    $(doc.fullscreen).bind('click', function (event) {
+        event.preventDefault();
+        alert('You have to save a document to view it fullscreen');
+    });
 
     var scripts = $('script[type=slide-template]');
     var s;
@@ -1924,7 +1930,7 @@ function onReady() {
         stockCode[s.title] = $(s).text();
     }
 
-    $(doc.editor).bind('keydown click focus', setSlidePosFromCursor);
+    $(doc.editor).bind('keydown click', setSlidePosFromCursor);
 
     $.ajax({
         url: 'slides.html',
@@ -1942,6 +1948,7 @@ function onReady() {
                 handleDomLoaded();
                 $(doc.next).click(nextSlide);
                 $(doc.prev).click(prevSlide);
+                getSlideBoundries();
             }
             document.body.appendChild(el);
         }
@@ -1965,7 +1972,7 @@ function getSlideBoundries() {
     curBoundriesText = latestText;
 }
 
-function setSlidePosFromCursor() {
+function setSlidePosFromCursor(event) {
     if (latestText != curBoundriesText) {
         getSlideBoundries();
     }
@@ -1984,6 +1991,21 @@ function setSlidePosFromCursor() {
     // in case cursor is at very end
     adjustSlidePos(slideEls.length - 1);
     return;
+}
+
+function setCursorPos() {
+    if (doc.editor.selectionEnd > slideBoundries[curSlide] &&
+        doc.editor.selectionEnd < slideBoundries[curSlide + 1]) {
+        return;
+    }
+    console.log('editor width: ' + doc.editor.scrollWidth + '  phantom width: ' + doc.phantom.scrollWidth);
+    var text = $(doc.editor).val().slice(0, slideBoundries[curSlide]);
+    $(doc.phantom).html('<pre>' + format.escapeHTML(text) + '</pre>');
+    var height = doc.phantom.offsetHeight;
+    doc.editor.selectionStart = slideBoundries[curSlide];
+    doc.editor.selectionEnd = slideBoundries[curSlide] + 10;
+    $(doc.editor).scrollTop(height);
+    $(doc.editor).blur();
 }
 
 function tabToSpace(event) {
@@ -2044,6 +2066,7 @@ function onResize(evt) {
         }
         $(doc.outputBlock).css('height', (currentScale * HEIGHT + BUTTON_HEIGHT) + 'px');
     }
+    $(doc.phantom).css('width', doc.editor.scrollWidth + 'px');
     setCrossTransform(doc.output, 'transform');
     positionNav();
 }
@@ -2060,6 +2083,10 @@ function setCrossTransform(elem, type) {
 function updateMeta(json) {
     document.title = json.title;
     $('#title').text(json.title);
+    $(doc.fullscreen).unbind();
+    $(doc.fullscreen).attr('href',
+                           location.href.replace('editor', '').
+                           replace(/&page=[0-9]+/, ''));
 }
 
 function onSaveSuccess(json) {
@@ -2067,11 +2094,12 @@ function onSaveSuccess(json) {
 }
 
 function onReadyIndex() {
+    handleAppCache();
     if (!document.location.hash) {
         document.location = 'http://html5slides.pageforest.com/editor';
+        return;
     }
     index = true;
-    handleAppCache();
     doc = dom.bindIDs();
     client = new clientLib.Client(exports);
     client.saveInterval = 0;
@@ -2080,7 +2108,7 @@ function onReadyIndex() {
 
 function setDoc(json) {
     if (index) {
-        document.body.innerHTML = wrap(json.blob.markdown);
+        $('body').html("<section class='slides'>" + json.blob.markdown + "</section>");
         var el = document.createElement('script');
         el.type = 'text/javascript';
         el.src = 'scripts/slides.js';
@@ -2092,13 +2120,18 @@ function setDoc(json) {
     }
     doc.editor.value = json.blob.markdown;
     onEditChange();
+    getSlideBoundries();
     updateMeta(json);
 }
 
 function getDoc() {
     if (index) {
-        return;
+        return {
+            blob: undefined,
+            reader: ['public']
+        };
     }
+
     return {
         blob: {
             version: 1,
