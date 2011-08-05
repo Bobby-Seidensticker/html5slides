@@ -151,12 +151,10 @@ function adjustSlidePos(newIndex) {
     }
     if (diff > 0) {
         for (var i = 0; i < diff; i++) {
-            if (curSlide < slideEls.length) {
-                temp = curSlide;
-            }
+            temp = curSlide;
             automatedFlag = true;
             nextSlide();
-            while (temp && curSlide == temp) {  // for slides that build
+            while (curSlide < slideEls.length - 1 && curSlide == temp) {  // for slides that build
                 automatedFlag = true;
                 nextSlide();
             }
@@ -441,7 +439,7 @@ function setDoc(json) {
 }
 
 function getDoc() {
-    if (index) { 
+    if (index) {
         return {
             blob: undefined,
             reader: ['public']
