@@ -1938,6 +1938,7 @@ function onReady() {
             console.log('ajax load error');
         },
         success: function(slides) {
+            $(doc.output).css('display', 'none');
             latestText = slides;
             doc.editor.value = slides;
             var el = document.createElement('script');
@@ -1949,6 +1950,7 @@ function onReady() {
                 $(doc.next).click(nextSlide);
                 $(doc.prev).click(prevSlide);
                 getSlideBoundries();
+                $(doc.output).css('display', 'block');
             }
             document.body.appendChild(el);
         }
@@ -1994,16 +1996,14 @@ function setSlidePosFromCursor(event) {
 }
 
 function setCursorPos() {
-    if (doc.editor.selectionEnd > slideBoundries[curSlide] &&
-        doc.editor.selectionEnd < slideBoundries[curSlide + 1]) {
-        return;
-    }
-    console.log('editor width: ' + doc.editor.scrollWidth + '  phantom width: ' + doc.phantom.scrollWidth);
     var text = $(doc.editor).val().slice(0, slideBoundries[curSlide]);
     $(doc.phantom).html('<pre>' + format.escapeHTML(text) + '</pre>');
     var height = doc.phantom.offsetHeight;
+    if (height < 100) {
+        height = 0;
+    }
     doc.editor.selectionStart = slideBoundries[curSlide];
-    doc.editor.selectionEnd = slideBoundries[curSlide] + 10;
+    doc.editor.selectionEnd = slideBoundries[curSlide];
     $(doc.editor).scrollTop(height);
     $(doc.editor).blur();
 }
@@ -2091,6 +2091,7 @@ function updateMeta(json) {
 
 function onSaveSuccess(json) {
     updateMeta(client.meta);
+//    client.storage.putBlob(
 }
 
 function onReadyIndex() {

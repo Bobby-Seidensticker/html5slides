@@ -36,13 +36,20 @@ span.menu-bar {
 }
 span.menu-bar div#phantom {
   position: absolute;
-  top: 0px;
-  z-index: 10;
-  left: -600px;
+  left: -9999px;
+  z-index: -1;
 }
 div#phantom pre {
   font-family: "Courier New", Courier, monospace;
   font-size: 100%;
+  border: 1px solid;
+  padding: 2px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  margin: 0;
+  letter-spacing: normal;
+  word-spacing: normal;
+  line-height: normal;
 }
 
 #page:not(.edit) #select { display: none; }

@@ -80,7 +80,7 @@
     <div id="footer">
       <hr/>
       <a target="_blank" id=fullscreen href="#">This Slideshow Fullscreen</a> |
-      <a target="_blank" href="http://html5slides.googlecode.com/svn/trunk/template/index.html">Google's Original</a> |
+      <a target="_blank" href="http://code.google.com/p/html5slides/">Google's Original</a> |
       <a target="_blank" href="https://github.com/Bobby-Seidensticker/html5slides">Source Code</a> |
       <a href="http://www.pageforest.com">Pageforest.com</a>
     </div>

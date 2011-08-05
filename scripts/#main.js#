@@ -406,7 +406,10 @@ function updateMeta(json) {
 
 function onSaveSuccess(json) {
     updateMeta(client.meta);
-//    client.storage.putBlob(
+    // save a flat html version
+    var flat = "<!DOCTYPE html><!--  Google HTML5 slide template  Authors: Luke Mahé (code)           Marcin Wichary (code and design)                      Dominic Mazzoni (browser compatibility)           Charles Chen (ChromeVox support)  URL: http://code.google.com/p/html5slides/--><html>  <head>    <title>Presentation</title>    <meta charset='utf-8'>    <script      src='http://html5slides.googlecode.com/svn/trunk/slides.js'></script>  </head><body style='display: none'>";
+
+    client.storage.putBlob(client.docid, 'slides', flat
 }
 
 function onReadyIndex() {
