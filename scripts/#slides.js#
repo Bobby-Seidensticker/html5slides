@@ -19,6 +19,10 @@ var PM_TOUCH_SENSITIVITY = 15;
 var curSlide;
 
 var handleLocationHash = namespace.lookup('com.pageforest.html5slides.handleLocationHash');
+var setCursorPos = namespace.lookup('com.pageforest.html5slides.setCursorPos');
+var automatedFlag = false;  // used to differentiate between next/prev slide calls
+                            // from main.js versus from user
+
 var files = {};
 
 /* ---------------------------------------------------------------------- */
@@ -194,8 +198,13 @@ function updateSlides() {
             break;
         }
     }
+
     // update position UI
-    document.getElementById('pos').innerHTML = (curSlide + 1) + ' / ' + (slideEls.length);
+    var pos = document.getElementById('pos');
+    if (pos) {
+        pos.innerHTML = (curSlide + 1) + ' / ' + (slideEls.length);
+    }
+
 
     triggerLeaveEvent(curSlide - 1);
     triggerEnterEvent(curSlide);
@@ -236,11 +245,17 @@ function prevSlide() {
         curSlide--;
 
         updateSlides();
+        // If this prevSlide was called by 
+        if (!automatedFlag) {
+            setCursorPos();
+        }
+        automatedFlag = false;
     }
 };
 
 function nextSlide() {
     if (buildNextItem()) {
+        automatedFlag = false;
         return;
     }
 
@@ -248,6 +263,10 @@ function nextSlide() {
         curSlide++;
 
         updateSlides();
+        if (!automatedFlag) {
+            setCursorPos();
+        }
+        automatedFlag = false;
     }
 };
 
@@ -389,17 +408,20 @@ function setupInteraction() {
     var el = document.createElement('div');
     el.className = 'slide-area';
     el.id = 'prev-slide-area';
+    el.removeEventListener('click', prevSlide, false);
     el.addEventListener('click', prevSlide, false);
     document.querySelector('section.slides').appendChild(el);
 
     var el = document.createElement('div');
     el.className = 'slide-area';
     el.id = 'next-slide-area';
+    el.removeEventListener('click', nextSlide, false);
     el.addEventListener('click', nextSlide, false);
     document.querySelector('section.slides').appendChild(el);
 
     /* Swiping */
 
+    document.body.removeEventListener('touchstart', handleTouchStart, false);
     document.body.addEventListener('touchstart', handleTouchStart, false);
 }
 
@@ -604,11 +626,11 @@ function makeBuildLists() {
 };
 
 function handleDomLoaded() {
-    refresh(addEventListeners, setupInteraction);
+    refresh(addEventListeners);
 };
 
 // Event Listeners bound only once
-function refresh(addListeners, setupInt) {
+function refresh(addListeners) {
     slideEls = document.querySelectorAll('section.slides > article');
 
     setupFrames();
@@ -622,9 +644,7 @@ function refresh(addListeners, setupInt) {
 
     updateSlides();
 
-    if (setupInt) {
-        setupInt();
-    }
+    setupInteraction();
 
     makeBuildLists();
 

@@ -117,15 +117,16 @@ function onEditChange(event) {
 }
 
 function render() {
+    if (latestText != curBoundriesText) {
+        getSlideBoundries();
+    }
     editTimer = undefined;
     if (renderedText == latestText) {
         return;
     }
     editTimer = setTimeout(render, EDIT_BUFFER);
-
     $(doc.output).html("<section class='slides'>" + latestText + "</section>");
     renderedText = latestText;
-
     refresh();
     tooFarInFuture();
     onResize();
@@ -151,7 +152,7 @@ function adjustSlidePos(newIndex) {
     }
     if (diff > 0) {
         for (var i = 0; i < diff; i++) {
-            if (curSlide < slideEls.length) {
+            if (curSlide < slideEls.length - 1) {
                 temp = curSlide;
             }
             automatedFlag = true;
@@ -290,9 +291,6 @@ function getSlideBoundries() {
 }
 
 function setSlidePosFromCursor(event) {
-    if (latestText != curBoundriesText) {
-        getSlideBoundries();
-    }
     // if cursor is inside slide currently displayed do nothing
     if (doc.editor.selectionEnd > slideBoundries[curSlide] &&
         doc.editor.selectionEnd < slideBoundries[curSlide + 1]) {
@@ -334,14 +332,6 @@ function tabToSpace(event) {
         this.selectionEnd = this.selectionStart;
     }
 }
-/*
-function onScroll() {
-    if (editVisible) {
-        currentScroll = window.scrollY;
-        setCrossTransform(doc.output, 'transform');
-        setTimeout(positionNav, 10);
-    }
-}*/
 
 function positionNav() {
     if (editVisible) {
@@ -406,13 +396,16 @@ function updateMeta(json) {
 
 function onSaveSuccess(json) {
     updateMeta(client.meta);
-//    client.storage.putBlob(
+    // save a flat html version
+    var flat = "<!DOCTYPE html>\n<!--\nGoogle HTML5 slide template  Authors: Luke Mahe (code)\nMarcin Wichary (code and design)\nDominic Mazzoni (browser compatibility)\nCharles Chen (ChromeVox support)\nURL: http://code.google.com/p/html5slides/\n-->\n<html>\n  <head>\n  <title>Presentation</title>\n    <meta charset='utf-8'>\n    <script src='http://html5slides.googlecode.com/svn/trunk/slides.js'></script>\n</head><body style='display: none'>    <section class='slides layout-regular template-default'>" + renderedText + 
+        "</section></body></html>";
+    client.storage.putBlob(client.docid, 'slides', flat);
 }
 
 function onReadyIndex() {
     handleAppCache();
     if (!document.location.hash) {
-        document.location = 'http://html5slides.pageforest.com/editor';
+        document.location.href = document.location.origin + '/editor';
         return;
     }
     index = true;
@@ -423,6 +416,8 @@ function onReadyIndex() {
 }
 
 function setDoc(json) {
+    latestText = json.blob.markdown;
+    renderedText = json.blob.markdown;
     if (index) {
         $('body').html("<section class='slides'>" + json.blob.markdown + "</section>");
         var el = document.createElement('script');
