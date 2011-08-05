@@ -1815,6 +1815,7 @@ function render() {
     refresh();
     tooFarInFuture();
     onResize();
+    setSlidePosFromCursor();
 }
 
 // if deleting text makes currentSlide > # slides then,
