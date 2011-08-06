@@ -20,8 +20,6 @@ var curSlide;
 
 var handleLocationHash = namespace.lookup('com.pageforest.html5slides.handleLocationHash');
 var setCursorPos = namespace.lookup('com.pageforest.html5slides.setCursorPos');
-var automatedFlag = false;  // used to differentiate between next/prev slide calls
-                            // from main.js versus from user
 
 var files = {};
 
@@ -240,21 +238,19 @@ function buildNextItem() {
     return true;
 };
 
-function prevSlide() {
+function prevSlide(automated) {
     if (curSlide > 0) {
         curSlide--;
-
         updateSlides();
-        if (!automatedFlag) {
+        // If this prevSlide was called by 
+        if (automated != 'automated') {
             setCursorPos();
         }
-        automatedFlag = false;
     }
 };
 
-function nextSlide() {
+function nextSlide(automated) {
     if (buildNextItem()) {
-        automatedFlag = false;
         return;
     }
 
@@ -262,10 +258,9 @@ function nextSlide() {
         curSlide++;
 
         updateSlides();
-        if (!automatedFlag) {
+        if (automated != 'automated') {
             setCursorPos();
         }
-        automatedFlag = false;
     }
 };
 

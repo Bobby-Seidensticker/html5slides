@@ -155,17 +155,14 @@ function adjustSlidePos(newIndex) {
     if (diff > 0) {
         for (i = 0; i < diff; i++) {
             var saveSlide = curSlide;
-            automatedFlag = true;
             // Advance past slides that have builds
             while (curSlide == saveSlide && curSlide < slideEls.length - 1) {
-                automatedFlag = true;
-                nextSlide();
+                nextSlide('automated');
             }
         }
     } else {
         for (i = 0; i < -diff; i++) {
-            automatedFlag = true;
-            prevSlide();
+            prevSlide('automated');
         }
     }
 }
@@ -182,7 +179,6 @@ function toggleEditor(evt) {
             $(doc.editor).bind('keyup', onEditChange);
         }
     } else {
-        render();
         $(doc.page).removeClass('edit');
         currentScroll = 0;
     }
@@ -267,6 +263,7 @@ function onReady() {
                 $(doc.prev).click(prevSlide);
                 getSlideBoundries();
                 $(doc.output).css('display', 'block');
+                setCursorPos();
             };
             document.body.appendChild(el);
         }
@@ -309,8 +306,7 @@ function setSlidePosFromCursor(event) {
 }
 
 function setCursorPos() {
-    var text = $(doc.editor).val().slice(0, slideBoundries[curSlide]);
-    $(doc.phantom).html('<pre>' + format.escapeHTML(text) + '</pre>');
+    $(doc.phantomPre).text($(doc.editor).val().slice(0, slideBoundries[curSlide]));
     var height = doc.phantom.offsetHeight;
     if (height < 100) {
         height = 0;

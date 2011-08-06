@@ -39,9 +39,9 @@
 <body>
   <div id="page">
     <h1 id="page-heading">
-      <span id="title">New Presentation</span>
+      <span id="title">Editable HTML5 Slides</span>
       <span class="menu-bar">
-        <div id=phantom></div>
+        <div id=phantom><pre id=phantomPre></pre></div>
         <select id=select>
           <option value=title>Large Title</option>
           <option value=basic>Basic Bullets and Paragraphs</option>
