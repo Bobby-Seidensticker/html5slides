@@ -651,12 +651,6 @@ function initialize() {
     if (window['_DEBUG']) {
         PERMANENT_URL_PREFIX = '../';
     }
-
-    if (window['_DCL']) {
-        handleDomLoaded();
-    } else {
-        document.addEventListener('DOMContentLoaded', handleDomLoaded, false);
-    }
 }
 
 // If ?debug exists then load the script relative instead of absolute

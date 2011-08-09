@@ -1923,6 +1923,9 @@ function onReady() {
     $(doc.next).click(nextSlide);
     $(doc.prev).click(prevSlide);
 
+    $(doc.output).html("<section class='slides'><article></article></section>");
+    handleDomLoaded();
+
     // check the url if there exists a doc to be loaded
     var urlData = handleLocationHash();
     // if there isn't, load default doc
@@ -1933,15 +1936,8 @@ function onReady() {
                 console.log('ajax load error');
             },
             success: function(slides) {
-                doc.editor.value = slides;
-                latestText = slides;
-                renderedText = slides;
-                $(doc.output).html("<section class='slides'>" + slides + "</section>");
-                handleDomLoaded();
-                getSlideBoundries();
-                setCursorPos();
-                onResize();
-                $(doc.output).css('display', 'block');
+                var json = {title: 'Editable HTML5 Slides', blob: {version: 1.1, slides: slides}};
+                setDoc(json);
             }
         });
     }
@@ -2114,7 +2110,7 @@ function setDoc(json) {
     doc.editor.value = latestText;
     renderedText = latestText;
     $(doc.output).html("<section class='slides'>" + latestText + "</section>");
-    handleDomLoaded();
+    refresh();
     getSlideBoundries();
     setCursorPos();
     onResize();
