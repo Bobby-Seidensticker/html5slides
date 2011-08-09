@@ -1715,14 +1715,15 @@ var editTimer;
 var EDIT_BUFFER = 1000;   // ms
 
 var currentScale;
-var currentScroll = 0;
+var currentShift = 0;
 var index = false;
 var slideBoundries = [];
 var curBoundriesText = '';
+var onReadyToggleEditor;
 
 
-var BASE_HEIGHT = 130;
-var BUTTON_HEIGHT = 40;
+var BASE_HEIGHT = 140;
+var BUTTON_HEIGHT = 38;
 var IDEAL_WIDTH = 1300;
 var COMPRESSED_WIDTH = 900;
 var HEIGHT = 700;
@@ -1865,10 +1866,9 @@ function toggleEditor(evt) {
         }
     } else {
         $(doc.page).removeClass('edit');
-        currentScroll = 0;
     }
     onResize();
-    $(doc.edit).val(editVisible ? 'hide' : 'edit');
+    $(doc.edit).val(editVisible ? 'Full' : 'Edit');
 }
 
 function insertStockCode() {
@@ -1925,7 +1925,6 @@ function onReady() {
 
     $(doc.output).html("<section class='slides'><article></article></section>");
     handleDomLoaded();
-
     // check the url if there exists a doc to be loaded
     var urlData = handleLocationHash();
     // if there isn't, load default doc
@@ -1941,7 +1940,6 @@ function onReady() {
             }
         });
     }
-
     // get stock code samples from script tags in editor(.html)
     var scripts = $('script[type=slide-template]');
     var s;
@@ -1949,6 +1947,7 @@ function onReady() {
         s = scripts[i];
         stockCode[s.title] = $(s).text();
     }
+    onReadyToggleEditor = true;
 }
 
 function getSlideBoundries() {
@@ -2054,8 +2053,7 @@ function onResize(evt) {
 }
 
 function setCrossTransform(elem, type) {
-    var val = 'translate(' + currentShift + 'px, ' +
-        currentScroll + 'px) scale(' + currentScale + ')';
+    var val = 'translate(' + currentShift + 'px, 0px) scale(' + currentScale + ')';
     $(elem).css('-webkit-' + type, val);
     $(elem).css('-moz-' + type, val);
     $(elem).css('-o-' + type, val);
@@ -2069,13 +2067,14 @@ function updateMeta(json) {
     $(doc.fullscreen).unbind();
     $(doc.fullscreen).attr('href',
                            location.href.replace('editor', '').
-                           replace(/&page=[0-9]+/, ''));
+                           replace(/&page=[0-9]+/, '').
+                           replace('#doc=', 'docs/') + '/slides');
 }
 
 function onSaveSuccess(json) {
     updateMeta(client.meta);
     // save a flat html version
-    var flat = "<!DOCTYPE html>\n<!--\nGoogle HTML5 slide template  Authors: Luke Mahe (code)\nMarcin Wichary (code and design)\nDominic Mazzoni (browser compatibility)\nCharles Chen (ChromeVox support)\nURL: http://code.google.com/p/html5slides/\n-->\n<html>\n  <head>\n  <title>Presentation</title>\n    <meta charset='utf-8'>\n    <script src='http://html5slides.googlecode.com/svn/trunk/slides.js'></script>\n</head><body style='display: none'>    <section class='slides layout-regular template-default'>" + renderedText +
+    var flat = "<!DOCTYPE html>\n<!--\nGoogle HTML5 slide template  Authors: Luke Mahe (code)\nMarcin Wichary (code and design)\nDominic Mazzoni (browser compatibility)\nCharles Chen (ChromeVox support)\nURL: http://code.google.com/p/html5slides/\n-->\n<html>\n  <head>\n  <title>Presentation</title>\n    <meta charset='utf-8'>\n    <script src='http://html5slides.googlecode.com/svn/trunk/slides.js'></script>\n</head><body style='display: none'>    <section class='slides'>" + renderedText +
         "</section></body></html>";
     client.storage.putBlob(client.docid, 'slides', flat);
 }
@@ -2102,13 +2101,9 @@ function setDoc(json) {
     } else {
         console.log('ERROR: unknown blob version number');
     }
-    if (index) {
-        $('body').html("<section class='slides'>" + latestText + "</section>");
-        handleDomLoaded();
-        return;
-    }
     doc.editor.value = latestText;
     renderedText = latestText;
+    $(doc.output).css('display', 'none');
     $(doc.output).html("<section class='slides'>" + latestText + "</section>");
     refresh();
     getSlideBoundries();
@@ -2116,6 +2111,10 @@ function setDoc(json) {
     onResize();
     $(doc.output).css('display', 'block');
     updateMeta(json);
+    if (onReadyToggleEditor) {
+        toggleEditor();
+        onReadyToggleEditor = false;
+    }
 }
 
 function getDoc() {

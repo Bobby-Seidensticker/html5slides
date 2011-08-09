@@ -44,15 +44,16 @@
       <span class="menu-bar">
         <div id=phantom><pre id=phantomPre></pre></div>
         <select id=select>
-          <option value=title>Large Title</option>
-          <option value=basic>Basic Bullets and Paragraphs</option>
+          <option value=title>Title</option>
+          <option value=text>Text</option>
+          <option value=bullets>Bullets</option>
+          <option value=segue>Segue Slide</option>
           <option value=code>Inline Code Snippet</option>
           <option value=codePretty>Block Pretty Code</option>
           <option value=builds>Builds with Action</option>
           <option value=table>With Table</option>
           <option value=styles>With Styles</option>
           <option value=smaller>Small font</option>
-          <option value=segue>Segue Slide</option>
           <option value=image>Image</option>
           <option value=imageCenter>Image Center</option>
           <option value=imageFill>Image Fill</option>
@@ -60,8 +61,8 @@
           <option value=embed>Embeded Webpage</option>
           <option value=embedFull>Embeded Webpage Full</option>
         </select>
-        <input type="button" id="insert" value="insert"/>
-        <input type="button" id="edit" value="edit"/>
+        <input type="button" id="insert" value="Insert"/>
+        <input type="button" id="edit" value="Edit"/>
       </span>
     </h1>
 
@@ -95,26 +96,34 @@
         To Two Lines
       </h1>
       <p>
-        Sergey Brin<br/>
-        May 10, 2011
+        Presenter's Name<br/>
+        Date
       </p>
     </article>
   </script>
 
-  <script type="slide-template" title="basic">
+  <script type="slide-template" title="text">
     <article>
-      <h3>Have some p's and ul's!</h3>
+      <h3>
+        Title Goes Here Up<br/>
+        To Two Lines
+      </h3>
       <p>
-        This is a paragraph with a bunch of text in it.  Here's even more text!
+        This is a paragraph with just text.  This is a paragraph with just text.
+        This is a paragraph with just text.  This is a paragraph with just text.
+        This is a paragraph with just text.  This is a paragraph with just text.
       </p>
+    </article>
+  </script>
+
+  <script type="slide-template" title="bullets">
+    <article>
+      <h3>Title</h3>
       <ul>
-        <li>1 Slacking Employee</li>
-        <li>2 Sticks</li>
-        <li>3 Cobblestone</li>
+        <li>Item 1
+        <li>Item 2
+        <li>Item 3
       </ul>
-      <p>
-        Another paragraph!
-      </p>
     </article>
   </script>
 
