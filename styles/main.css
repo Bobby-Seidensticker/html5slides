@@ -63,7 +63,6 @@ div#phantom pre {
 #page:not(.edit) #outputBlock { width: 100%; }
 
 #output {
-  display: none;
   position: relative;
   -webkit-transition: -webkit-transform 0s;
   height: 700px;
