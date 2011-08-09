@@ -1913,47 +1913,46 @@ function onReady() {
 
     $(doc.edit).click(toggleEditor);
     $(doc.insert).click(insertStockCode);
-//    $(window).bind('scroll', onScroll);
     $(doc.editor).keydown(tabToSpace);
+    $(doc.editor).bind('keydown click', setSlidePosFromCursor);
+    $(window).bind('resize', onResize);
     $(doc.fullscreen).bind('click', function (event) {
         event.preventDefault();
         alert('You have to save a document to view it fullscreen');
     });
+    $(doc.next).click(nextSlide);
+    $(doc.prev).click(prevSlide);
 
+    // check the url if there exists a doc to be loaded
+    var urlData = handleLocationHash();
+    // if there isn't, load default doc
+    if (!urlData.doc) {
+        $.ajax({
+            url: 'slides.html',
+            error: function(result, status) {
+                console.log('ajax load error');
+            },
+            success: function(slides) {
+                doc.editor.value = slides;
+                latestText = slides;
+                renderedText = slides;
+                $(doc.output).html("<section class='slides'>" + slides + "</section>");
+                handleDomLoaded();
+                getSlideBoundries();
+                setCursorPos();
+                onResize();
+                $(doc.output).css('display', 'block');
+            }
+        });
+    }
+
+    // get stock code samples from script tags in editor(.html)
     var scripts = $('script[type=slide-template]');
     var s;
     for (var i = 0; i < scripts.length; i++) {
         s = scripts[i];
         stockCode[s.title] = $(s).text();
     }
-
-    $(doc.editor).bind('keydown click', setSlidePosFromCursor);
-
-    $.ajax({
-        url: 'slides.html',
-        error: function(result, status) {
-            console.log('ajax load error');
-        },
-        success: function(slides) {
-            $(doc.output).css('display', 'none');
-            latestText = slides;
-            doc.editor.value = slides;
-            var el = document.createElement('script');
-            el.type = 'text/javascript';
-            el.src = 'scripts/slides.js';
-            el.onload = function() {
-                render();
-                handleDomLoaded();
-                $(doc.next).click(nextSlide);
-                $(doc.prev).click(prevSlide);
-                getSlideBoundries();
-                $(doc.output).css('display', 'block');
-                setCursorPos();
-            };
-            document.body.appendChild(el);
-        }
-    });
-    $(window).bind('resize', onResize);
 }
 
 function getSlideBoundries() {
@@ -2099,22 +2098,27 @@ function onReadyIndex() {
 }
 
 function setDoc(json) {
-    latestText = json.blob.markdown;
-    renderedText = json.blob.markdown;
+    console.log('setDoc()');
+    if (json.blob.version === 1) {
+        latestText = json.blob.markdown;
+    } else if (json.blob.version === 1.1) {
+        latestText = json.blob.slides;
+    } else {
+        console.log('ERROR: unknown blob version number');
+    }
     if (index) {
-        $('body').html("<section class='slides'>" + json.blob.markdown + "</section>");
-        var el = document.createElement('script');
-        el.type = 'text/javascript';
-        el.src = 'scripts/slides.js';
-        el.onload = function() {
-            handleDomLoaded();
-        };
-        document.body.appendChild(el);
+        $('body').html("<section class='slides'>" + latestText + "</section>");
+        handleDomLoaded();
         return;
     }
-    doc.editor.value = json.blob.markdown;
-    onEditChange();
+    doc.editor.value = latestText;
+    renderedText = latestText;
+    $(doc.output).html("<section class='slides'>" + latestText + "</section>");
+    handleDomLoaded();
     getSlideBoundries();
+    setCursorPos();
+    onResize();
+    $(doc.output).css('display', 'block');
     updateMeta(json);
 }
 
@@ -2128,8 +2132,8 @@ function getDoc() {
 
     return {
         blob: {
-            version: 1,
-            markdown: doc.editor.value
+            version: 1.1,
+            slides: doc.editor.value
         },
         readers: ['public']
     };
