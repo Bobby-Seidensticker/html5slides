@@ -5,7 +5,6 @@ var markdown = new Showdown.converter();
 
 exports.extend({
     'onReady': onReady,
-    'onReadyIndex': onReadyIndex,
     'getDoc': getDoc,
     'setDoc': setDoc,
     'onSaveSuccess': onSaveSuccess,
@@ -31,7 +30,6 @@ var EDIT_BUFFER = 1000;   // ms
 
 var currentScale;
 var currentShift = 0;
-var index = false;
 var slideBoundries = [];
 var curBoundriesText = '';
 var onReadyToggleEditor;
@@ -381,8 +379,7 @@ function updateMeta(json) {
     $('#title').text(json.title);
     $(doc.fullscreen).unbind();
     $(doc.fullscreen).attr('href',
-                           location.href.replace('editor', '').
-                           replace(/&page=[0-9]+/, '').
+                           location.href.replace(/&page=[0-9]+/, '').
                            replace('#doc=', 'docs/') + '/slides');
 }
 
@@ -392,19 +389,6 @@ function onSaveSuccess(json) {
     var flat = "<!DOCTYPE html>\n<!--\nGoogle HTML5 slide template  Authors: Luke Mahe (code)\nMarcin Wichary (code and design)\nDominic Mazzoni (browser compatibility)\nCharles Chen (ChromeVox support)\nURL: http://code.google.com/p/html5slides/\n-->\n<html>\n  <head>\n  <title>Presentation</title>\n    <meta charset='utf-8'>\n    <script src='http://html5slides.googlecode.com/svn/trunk/slides.js'></script>\n</head><body style='display: none'>    <section class='slides'>" + renderedText +
         "</section></body></html>";
     client.storage.putBlob(client.docid, 'slides', flat);
-}
-
-function onReadyIndex() {
-    handleAppCache();
-    if (!document.location.hash) {
-        document.location.href = document.location.origin + '/editor';
-        return;
-    }
-    index = true;
-    doc = dom.bindIDs();
-    client = new clientLib.Client(exports);
-    client.saveInterval = 0;
-    $(document.body).addClass('index');
 }
 
 function setDoc(json) {
@@ -433,13 +417,6 @@ function setDoc(json) {
 }
 
 function getDoc() {
-    if (index) {
-        return {
-            blob: undefined,
-            reader: ['public']
-        };
-    }
-
     return {
         blob: {
             version: 1.1,
