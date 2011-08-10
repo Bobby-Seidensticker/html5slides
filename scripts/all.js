@@ -2109,6 +2109,7 @@ function setDoc(json) {
     setCursorPos();
     onResize();
     $(doc.output).css('visibility', 'visible');
+    tooFarInFuture();
 
     if (onReadyFlag) {
         toggleEditor();
