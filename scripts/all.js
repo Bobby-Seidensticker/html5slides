@@ -419,7 +419,7 @@ var currentScale;
 var currentShift = 0;
 var slideBoundries = [];
 var curBoundriesText = '';
-var onReadyToggleEditor;
+var onReadyFlag;
 
 
 var BASE_HEIGHT = 140;
@@ -616,10 +616,7 @@ function onReady() {
     $(doc.editor).keydown(tabToSpace);
     $(doc.editor).bind('keydown click', setSlidePosFromCursor);
     $(window).bind('resize', onResize);
-    $(doc.fullscreen).bind('click', function (event) {
-        event.preventDefault();
-        alert('You have to save a document to view it fullscreen');
-    });
+    $(doc.fullscreen).bind('click', viewSlideshowFullscreen);
     $(doc.next).click(nextSlide);
     $(doc.prev).click(prevSlide);
 
@@ -647,7 +644,28 @@ function onReady() {
         s = scripts[i];
         stockCode[s.title] = $(s).text();
     }
-    onReadyToggleEditor = true;
+    onReadyFlag = true;
+}
+
+function viewSlideshowFullscreen() {
+    if (client.docid == undefined) {
+        event.preventDefault();
+        alert('You have to save a document to view it fullscreen');
+        return;
+    }
+    if (client.state != 'clean') {
+        alert('Warning, the current slideshow has not been saved');
+    }
+}
+
+function modifyFullscreenURL() {
+    if (client.docid != undefined) {
+        $(doc.fullscreen).attr('href',
+                               location.href.replace(/page=[0-9]+/, '').
+                               replace('doc=', 'docs/').
+                               replace('#', '').
+                               replace('&', '') + '/slides');
+    }
 }
 
 function getSlideBoundries() {
@@ -764,10 +782,7 @@ function setCrossTransform(elem, type) {
 function updateMeta(json) {
     document.title = json.title;
     $('#title').text(json.title);
-    $(doc.fullscreen).unbind();
-    $(doc.fullscreen).attr('href',
-                           location.href.replace(/&page=[0-9]+/, '').
-                           replace('#doc=', 'docs/') + '/slides');
+    modifyFullscreenURL();
 }
 
 function onSaveSuccess(json) {
@@ -789,18 +804,19 @@ function setDoc(json) {
     }
     doc.editor.value = latestText;
     renderedText = latestText;
-    $(doc.output).css('display', 'none');
+    $(doc.output).css('visibility', 'hidden');
     $(doc.output).html("<section class='slides'>" + latestText + "</section>");
     refresh();
     getSlideBoundries();
     setCursorPos();
     onResize();
-    $(doc.output).css('display', 'block');
-    updateMeta(json);
-    if (onReadyToggleEditor) {
+    $(doc.output).css('visibility', 'visible');
+
+    if (onReadyFlag) {
         toggleEditor();
-        onReadyToggleEditor = false;
+        onReadyFlag = false;
     }
+    updateMeta(json);
 }
 
 function getDoc() {
