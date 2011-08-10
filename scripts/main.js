@@ -1,7 +1,6 @@
 var clientLib = require('com.pageforest.client');
 var dom = require('org.startpad.dom');
 var format = require('org.startpad.format');
-var markdown = new Showdown.converter();
 
 exports.extend({
     'onReady': onReady,
